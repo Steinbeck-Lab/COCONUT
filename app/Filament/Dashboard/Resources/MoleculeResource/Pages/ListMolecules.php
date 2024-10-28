@@ -64,11 +64,6 @@ class ListMolecules extends ListRecords
         }
     }
 
-    protected function paginateTableQuery(Builder $query): CursorPaginator
-    {
-        return $query->cursorPaginate(($this->getTableRecordsPerPage() === 'all') ? $query->count() : $this->getTableRecordsPerPage());
-    }
-
     public function getPresetViews(): array
     {
         return [
