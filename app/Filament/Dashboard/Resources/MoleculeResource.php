@@ -65,6 +65,8 @@ class MoleculeResource extends Resource
     {
         return $table
             ->recordTitleAttribute('identifier')
+            ->defaultPaginationPageOption(10)
+            ->deferLoading()
             ->columns([
                 ImageColumn::make('structure')->square()
                     ->label('Structure')

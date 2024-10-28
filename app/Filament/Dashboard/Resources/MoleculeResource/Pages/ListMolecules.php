@@ -7,7 +7,12 @@ use App\Models\Molecule;
 use Archilex\AdvancedTables\AdvancedTables;
 use Archilex\AdvancedTables\Components\PresetView;
 use Filament\Actions;
+use Filament\Actions\Action;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class ListMolecules extends ListRecords
 {
@@ -15,11 +20,53 @@ class ListMolecules extends ListRecords
 
     protected static string $resource = MoleculeResource::class;
 
+    public $searchResults = null;
+
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('substructureSearch')
+                ->label('Substructure Search')
+                ->modalHeading('Draw a Substructure')
+                ->modalContent(view('components.openchemlib-editor'))
+                ->form([
+                    TextInput::make('structure-smiles')
+                        ->label('SMILES Structure')
+                        ->required()
+                        ->maxLength(255),
+                ])
+                ->button()
+                ->modalSubmitActionLabel('Search')
+                ->action(function (array $data): void {
+                    $smiles = $data['structure-smiles'];
+                    $this->searchResults = collect(DB::select("SELECT id 
+                                                            FROM mols 
+                                                            WHERE m@> mol_from_smiles('{$smiles}')::mol 
+                                                            ORDER BY tanimoto_sml(morganbv_fp(mol_from_smiles('{$smiles}')::mol), morganbv_fp(m::mol)) DESC
+                                                            ;"))->pluck('id');
+                    $this->getTableQuery();
+                }),
             Actions\CreateAction::make(),
         ];
+    }
+
+    protected function getTableQuery(): Builder
+    {
+        if ($this->searchResults) {
+            return Molecule::query()
+                ->select('id', 'name', 'identifier', 'canonical_smiles', 'standard_inchi', 'status', 'active', 'synonyms')
+                ->whereIntegerInRaw('id', $this->searchResults)
+                ->with(['properties' => function ($query) {
+                    $query->select('exact_molecular_weight', 'np_likeness');
+                }]);
+        } else {
+            return Molecule::query();
+        }
+    }
+
+    protected function paginateTableQuery(Builder $query): CursorPaginator
+    {
+        return $query->cursorPaginate(($this->getTableRecordsPerPage() === 'all') ? $query->count() : $this->getTableRecordsPerPage());
     }
 
     public function getPresetViews(): array
