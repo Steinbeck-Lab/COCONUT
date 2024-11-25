@@ -20,8 +20,14 @@ use Illuminate\Support\Str;
 
 class MoleculesRelationManager extends RelationManager
 {
+    /**
+     * The relationship name.
+     */
     protected static string $relationship = 'molecules';
 
+    /**
+     * The form schema used by the relation manager.
+     */
     public function form(Form $form): Form
     {
         return $form
@@ -32,6 +38,9 @@ class MoleculesRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Customizes the table used by the relation manager.
+     */
     public function table(Table $table): Table
     {
         return $table
@@ -285,6 +294,10 @@ class MoleculesRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Whether the relation is read-only. Non-editable relations will not
+     * be passed to actions and will not be sortable.
+     */
     public function isReadOnly(): bool
     {
         return false;

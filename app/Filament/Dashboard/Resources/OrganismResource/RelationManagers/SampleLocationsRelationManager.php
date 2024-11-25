@@ -11,8 +11,14 @@ use Filament\Tables\Table;
 
 class SampleLocationsRelationManager extends RelationManager
 {
+    /**
+     * The relationship name.
+     */
     protected static string $relationship = 'sampleLocations';
 
+    /**
+     * The form schema used by the relation manager.
+     */
     public function form(Form $form): Form
     {
         return $form
@@ -23,6 +29,9 @@ class SampleLocationsRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * The table schema used by the relation manager.
+     */
     public function table(Table $table): Table
     {
         return $table

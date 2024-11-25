@@ -11,8 +11,17 @@ use Filament\Tables\Table;
 
 class OrganismsRelationManager extends RelationManager
 {
+    /**
+     * The relationship name.
+     */
     protected static string $relationship = 'organisms';
 
+    /**
+     * Defines the form schema for managing the organisms relationship.
+     *
+     * @param  Form  $form  The form instance to be configured.
+     * @return Form The configured form instance.
+     */
     public function form(Form $form): Form
     {
         return $form
@@ -23,6 +32,12 @@ class OrganismsRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Defines the table schema for the relation manager.
+     *
+     * @param  Table  $table  The table instance to be configured.
+     * @return Table The configured table instance.
+     */
     public function table(Table $table): Table
     {
         return $table

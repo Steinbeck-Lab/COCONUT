@@ -7,5 +7,8 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateGeoLocation extends CreateRecord
 {
+    /**
+     * The resource the record belongs to.
+     */
     protected static string $resource = GeoLocationResource::class;
 }

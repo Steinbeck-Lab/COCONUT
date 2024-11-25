@@ -8,8 +8,23 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditReport extends EditRecord
 {
+    /**
+     * Resource model associated with the view / form.
+     */
     protected static string $resource = ReportResource::class;
 
+    /**
+     * Mutates the form data before filling the form with existing record data.
+     *
+     * This function checks if the record is marked as a change request.
+     * If it is, it sets flags to show only the fields that need to be shown,
+     * based on the initial suggestions. It updates the form data with the
+     * changes suggested by curators, such as geo locations, synonyms,
+     * name, CAS numbers, organisms, and citations.
+     *
+     * @param  array  $data  The form data to be mutated.
+     * @return array The mutated form data with updated fields and flags.
+     */
     protected function mutateFormDataBeforeFill(array $data): array
     {
         if ($this->record['is_change'] == true) {
@@ -68,6 +83,14 @@ class EditReport extends EditRecord
         return $data;
     }
 
+    /**
+     * Mutates the form data before saving it.
+     *
+     * If the record is marked as a change, it copies changes to the curator JSON.
+     *
+     * @param  array  $data  The form data to be mutated.
+     * @return array The mutated form data.
+     */
     protected function mutateFormDataBeforeSave(array $data): array
     {
         if ($this->record->is_change) {
@@ -77,6 +100,11 @@ class EditReport extends EditRecord
         return $data;
     }
 
+    /**
+     * Returns an array of actions to be displayed in the header.
+     *
+     * @return array An array of header actions.
+     */
     protected function getHeaderActions(): array
     {
         return [

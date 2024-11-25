@@ -10,8 +10,20 @@ use Illuminate\Support\Facades\DB;
 
 class CollectionStats extends BaseWidget
 {
+    /**
+     * The record to use for this widget.
+     */
     public ?Collection $record = null;
 
+    /**
+     * Retrieves an array of statistics for the collection record.
+     *
+     * This method returns a list of statistics, each represented as a Stat object.
+     * It provides counts for entries, passed entries, failed entries, molecules,
+     * citations, organisms, and geo locations associated with the collection record.
+     *
+     * @return array An array of Stat objects representing various statistics.
+     */
     protected function getStats(): array
     {
         return [

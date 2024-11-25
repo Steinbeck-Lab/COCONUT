@@ -10,8 +10,21 @@ use Illuminate\Support\Facades\DB;
 
 class GeoLocationStats extends BaseWidget
 {
+    /**
+     * The record to use for the widget.
+     *
+     * @var string
+     */
     public ?GeoLocation $record = null;
 
+    /**
+     * Retrieves an array of statistics for the geo location record.
+     *
+     * This method returns a list of statistics, each represented as a Stat object.
+     * It provides counts for molecules and organisms associated with the geo location record.
+     *
+     * @return array An array of Stat objects representing various statistics.
+     */
     protected function getStats(): array
     {
         return [

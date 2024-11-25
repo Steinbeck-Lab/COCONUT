@@ -20,8 +20,14 @@ use Illuminate\Support\Facades\Artisan;
 
 class EntriesRelationManager extends RelationManager
 {
+    /**
+     * The relationship name.
+     */
     protected static string $relationship = 'entries';
 
+    /**
+     * Defines the form schema for the relation manager.
+     */
     public function form(Form $form): Form
     {
         return $form
@@ -72,6 +78,13 @@ class EntriesRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Configures the schema for the infolist, defining sections and components
+     * to display a variety of text and image entries related to a collection.
+     *
+     * @param  Infolist  $infolist  The infolist instance to configure.
+     * @return Infolist The configured infolist instance.
+     */
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist
@@ -125,6 +138,9 @@ class EntriesRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Builds the table for the relation manager.
+     */
     public function table(Table $table): Table
     {
         return $table

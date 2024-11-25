@@ -10,8 +10,19 @@ use Illuminate\Support\Facades\DB;
 
 class OrganismStats extends BaseWidget
 {
+    /**
+     * Organism that the stats will be based on.
+     */
     public ?Organism $record = null;
 
+    /**
+     * Retrieves an array of statistics for the organism record.
+     *
+     * This method returns a list of statistics, each represented as a Stat object.
+     * It provides counts for molecules and geo locations associated with the organism record.
+     *
+     * @return array An array of Stat objects representing various statistics.
+     */
     protected function getStats(): array
     {
         return [

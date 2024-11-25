@@ -16,9 +16,8 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Tabs;
@@ -42,25 +41,64 @@ use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class ReportResource extends Resource
 {
+    /**
+     * Navigation Group to which the resource belongs.
+     */
     protected static ?string $navigationGroup = 'Reporting';
 
+    /**
+     * The model the resource corresponds to.
+     */
     protected static ?string $model = Report::class;
 
+    /**
+     * Navigation sort order for the resource in the navigation menu.
+     */
     protected static ?int $navigationSort = 1;
 
+    /**
+     * The navigation icon for the resource.
+     */
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    /**
+     * Molecule which is being reported
+     */
     protected static $molecule = null;
 
+    /**
+     * Approved changes to the molecule
+     */
     protected static $approved_changes = null;
 
+    /**
+     * Overall changes to the molecule
+     */
     protected static $overall_changes = null;
 
+    /**
+     * Initialize the controller.
+     *
+     * If a 'compound_id' is present in the request, retrieve the corresponding Molecule instance and assign it to the $molecule property.
+     */
     public function __construct()
     {
         self::$molecule = request()->has('compound_id') ? Molecule::where('identifier', request()->compound_id)->first() : null;
     }
 
+    /**
+     * Defines the form structure for the ReportResource.
+     *
+     * This function sets up the schema for the form used in managing reports.
+     * It includes various input fields and actions such as toggles, text inputs,
+     * select dropdowns, and custom actions for approving or rejecting reports.
+     * The form dynamically adapts based on the operation type and user roles,
+     * ensuring that only relevant fields and actions are visible or enabled
+     * based on the current context.
+     *
+     * @param  Form  $form  The form instance to be configured.
+     * @return Form The configured form instance.
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -557,6 +595,10 @@ class ReportResource extends Resource
             ])->columns(1);
     }
 
+    /**
+     * Overrides the default table layout and adds a column for selecting
+     * a curator for each report.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -597,32 +639,6 @@ class ReportResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->visible(function ($record) {
-                    //     return auth()->user()->roles()->exists() && $record['status'] == 'submitted';
-                    // }),
-                    // Tables\Actions\Action::make('approve')
-                    //     // ->button()
-                    //     ->hidden(function (Report $record) {
-                    //         return ! auth()->user()->roles()->exists() || $record['status'] == 'draft' || $record['status'] == 'rejected' || $record['status'] == 'approved';
-                    //     })
-                    //     ->form([
-                    //         Textarea::make('reason'),
-                    //     ])
-                    //     ->action(function (array $data, Report $record, Molecule $molecule, $livewire): void {
-                    //         self::approveReport($data, $record, $molecule, $livewire);
-                    //     }),
-                    // Tables\Actions\Action::make('reject')
-                    //     // ->button()
-                    //     ->color('danger')
-                    //     ->hidden(function (Report $record) {
-                    //         return ! auth()->user()->roles()->exists() || $record['status'] == 'draft' || $record['status'] == 'rejected' || $record['status'] == 'approved';
-                    //     })
-                    //     ->form([
-                    //         Textarea::make('reason'),
-
-                    //     ])
-                    //     ->action(function (array $data, Report $record): void {
-                    //         self::rejectReport($data, $record, $livewire);
-                    //     }),
                         return auth()->user()->roles()->exists() && $record['status'] == 'submitted' && ($record['assigned_to'] == null || $record['assigned_to'] == auth()->id());
                     }),
                 Tables\Actions\ViewAction::make(),
@@ -634,6 +650,11 @@ class ReportResource extends Resource
             ]);
     }
 
+    /**
+     * Get the relation managers for the Report resource.
+     *
+     * @return array An array of relation manager class names associated with the Report resource.
+     */
     public static function getRelations(): array
     {
         return [
@@ -645,6 +666,11 @@ class ReportResource extends Resource
         ];
     }
 
+    /**
+     * Get the pages for the Report resource.
+     *
+     * @return array An associative array of page class names and their corresponding routes.
+     */
     public static function getPages(): array
     {
         return [
@@ -655,7 +681,10 @@ class ReportResource extends Resource
         ];
     }
 
-    // Define the Eloquent query for retrieving records based on user roles
+    /**
+     * Define the Eloquent query for retrieving records based on user roles
+     *
+     * */
     public static function getEloquentQuery(): Builder
     {
         if (! auth()->user()->roles()->exists()) {
@@ -665,6 +694,24 @@ class ReportResource extends Resource
         return parent::getEloquentQuery();
     }
 
+    /**
+     * Prepare an array of approved changes from a report submission.
+     *
+     * This function takes a Report model and a Livewire component as input.
+     * It returns an associative array of approved changes, which are any changes
+     * that have been approved by the curator.
+     *
+     * The array keys are the names of the fields that have been changed, and the
+     * values are the new values for those fields.
+     *
+     * The function first checks if the report is a change request. If it is,
+     * it then checks if the curator has approved the changes. If the curator
+     * has approved the changes, the function adds the new values to the array.
+     *
+     * @param  Report  $record  The Report model to process.
+     * @param  $livewire  The Livewire component containing the data.
+     * @return array An associative array of approved changes.
+     */
     public static function prepareApprovedChanges(Report $record, $livewire)
     {
         $approved_changes = [];
@@ -717,6 +764,16 @@ class ReportResource extends Resource
         return $approved_changes;
     }
 
+    /**
+     * Approves a report. This function is used by the curator to approve or reject a report.
+     * If the report is for a synthetic molecule, it deactivates the molecules.
+     * If the report is for a change, it runs SQL queries and updates the record with the approved changes.
+     *
+     * @param  array  $data  The form data, which includes the reason for the approval or rejection.
+     * @param  Report  $record  The report record.
+     * @param  Molecule  $molecule  The molecule record.
+     * @param  $livewire  The Livewire component.
+     */
     public static function approveReport(array $data, Report $record, Molecule $molecule, $livewire): void
     {
         // In case of reporting a synthetic molecule, Deactivate Molecules
@@ -749,6 +806,17 @@ class ReportResource extends Resource
         $livewire->redirect(ReportResource::getUrl('view', ['record' => $record->id]));
     }
 
+    /**
+     * Rejects a report by updating its status and saving the reason for rejection.
+     *
+     * This function updates the report's status to 'rejected' and saves the provided
+     * reason for the rejection as a comment. After updating the record, it redirects
+     * the user to the view page of the report.
+     *
+     * @param  array  $data  The form data, including the reason for rejection.
+     * @param  Report  $record  The report record to be updated.
+     * @param  $livewire  The Livewire component handling the request.
+     */
     public static function rejectReport(array $data, Report $record, $livewire): void
     {
         $record['status'] = 'rejected';
@@ -758,6 +826,17 @@ class ReportResource extends Resource
         $livewire->redirect(ReportResource::getUrl('view', ['record' => $record->id]));
     }
 
+    /**
+     * Executes SQL queries to update the molecule record with approved changes.
+     *
+     * This function performs a database transaction to apply various changes
+     * to a molecule based on the approved changes in the report. It handles
+     * changes for geo locations, synonyms, name, CAS numbers, organisms, and
+     * citations. For each type of change, it adds new entries or removes
+     * existing ones from the molecule's associations, as needed.
+     *
+     * @param  Report  $record  The Report model containing the changes.
+     */
     public static function runSQLQueries(Report $record): void
     {
         DB::transaction(function () use ($record) {

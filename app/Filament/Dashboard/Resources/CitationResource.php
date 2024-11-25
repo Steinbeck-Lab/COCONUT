@@ -16,22 +16,48 @@ use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class CitationResource extends Resource
 {
+    /**
+     * The group the resource belongs to.
+     */
     protected static ?string $navigationGroup = 'Data';
 
+    /**
+     * The model the resource corresponds to.
+     */
     protected static ?string $model = Citation::class;
 
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     */
     protected static ?string $recordTitleAttribute = 'title';
 
+    /**
+     * The slug that should be used to represent the resource when being displayed.
+     */
+    protected static ?string $slug = 'citations';
+
+    /**
+     * The navigation sort order for the resource.
+     */
     protected static ?int $navigationSort = 2;
 
+    /**
+     * The navigation icon for the resource.
+     */
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
+    /**
+     * Gets the form schema used by the resource.
+     */
     public static function form(Form $form): Form
     {
         return $form
             ->schema(Citation::getForm());
     }
 
+    /**
+     * Gets the table schema used by the resource.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -56,6 +82,11 @@ class CitationResource extends Resource
             ]);
     }
 
+    /**
+     * Get the relation managers for the Citation resource.
+     *
+     * @return array An array of relation manager class names associated with the Citation resource.
+     */
     public static function getRelations(): array
     {
         return [
@@ -65,6 +96,11 @@ class CitationResource extends Resource
         ];
     }
 
+    /**
+     * Get the pages for the Citation resource.
+     *
+     * @return array An associative array of page classes and their corresponding routes.
+     */
     public static function getPages(): array
     {
         return [
@@ -74,6 +110,11 @@ class CitationResource extends Resource
         ];
     }
 
+    /**
+     * Get the navigation badge for the Citation resource.
+     *
+     * @return string|null The navigation badge value, or null if not available.
+     */
     public static function getNavigationBadge(): ?string
     {
         return Cache::get('stats.citations');

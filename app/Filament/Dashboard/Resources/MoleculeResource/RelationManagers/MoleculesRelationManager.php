@@ -10,14 +10,23 @@ use Filament\Tables\Table;
 
 class MoleculesRelationManager extends RelationManager
 {
+    /**
+     * The form schema used by the relation manager.
+     */
     protected static string $relationship = 'variants';
 
+    /**
+     * The form schema used by the relation manager.
+     */
     public function form(Form $form): Form
     {
         return $form
             ->schema([]);
     }
 
+    /**
+     * The table schema of the relation manager.
+     */
     public function table(Table $table): Table
     {
         return $table

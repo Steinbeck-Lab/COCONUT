@@ -7,8 +7,20 @@ use Filament\Resources\Pages\ViewRecord;
 
 class ViewReport extends ViewRecord
 {
+    /**
+     * Resource being viewed.
+     */
     protected static string $resource = ReportResource::class;
 
+    /**
+     * Mutates the form data before filling the form with existing record data.
+     *
+     * If the record is marked as a change request, it copies the curator's suggested changes
+     * to the respective fields.
+     *
+     * @param  array  $data  The form data to be mutated.
+     * @return array The mutated form data with updated fields.
+     */
     protected function mutateFormDataBeforeFill(array $data): array
     {
         if ($data['is_change'] == true) {

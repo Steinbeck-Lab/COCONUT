@@ -13,8 +13,16 @@ class ListReports extends ListRecords
 {
     use AdvancedTables;
 
+    /**
+     * Get the resource for the class.
+     */
     protected static string $resource = ReportResource::class;
 
+    /**
+     * Returns an array of actions to be displayed in the header.
+     *
+     * @return array An array containing the create action.
+     */
     protected function getHeaderActions(): array
     {
         return [
@@ -22,6 +30,13 @@ class ListReports extends ListRecords
         ];
     }
 
+    /**
+     * Returns an array of PresetView objects for the list page.
+     *
+     * The first preset view is set to default and will be used if no preset view is selected.
+     *
+     * @return array An array containing the preset views.
+     */
     public function getPresetViews(): array
     {
         $presetViews = [

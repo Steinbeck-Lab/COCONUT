@@ -33,14 +33,29 @@ use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class MoleculeResource extends Resource
 {
+    /**
+     * Navigation group to which the resource belongs.
+     */
     protected static ?string $navigationGroup = 'Data';
 
+    /**
+     * The model the resource corresponds to.
+     */
     protected static ?string $model = Molecule::class;
 
+    /**
+     * The navigation sort order for the resource.
+     */
     protected static ?int $navigationSort = 3;
 
+    /**
+     * The navigation icon for the resource.
+     */
     protected static ?string $navigationIcon = 'heroicon-o-share';
 
+    /**
+     * Build form for the resource.
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -61,6 +76,18 @@ class MoleculeResource extends Resource
             ]);
     }
 
+    /**
+     * Configures the table for displaying molecule records.
+     *
+     * This function sets up the table schema for the MoleculeResource,
+     * including columns, filters, actions, and bulk actions. The table
+     * displays various attributes of a molecule such as structure,
+     * identifier, name, synonyms, and properties like exact molecular
+     * weight and NP likeness. It also includes actions for viewing,
+     * editing, reporting, activating/deactivating molecules, as well
+     * as bulk actions for deleting, changing active status, and exporting
+     * data in multiple formats.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -178,6 +205,15 @@ class MoleculeResource extends Resource
             ]);
     }
 
+    /**
+     * Retrieves an array of relation manager classes associated with the MoleculeResource.
+     *
+     * This function returns a list of relation manager classes that define the relationships
+     * between the Molecule resource and other resources, such as Properties, Collections,
+     * Citations, Molecules, Related entities, GeoLocations, Organisms, and Audits.
+     *
+     * @return array An array of relation manager class names.
+     */
     public static function getRelations(): array
     {
         return [
@@ -192,6 +228,14 @@ class MoleculeResource extends Resource
         ];
     }
 
+    /**
+     * Retrieves an array of page classes associated with the MoleculeResource.
+     *
+     * This function returns a list of page classes that define the routes for
+     * the Molecule resource, such as ListMolecules, CreateMolecule, EditMolecule, and ViewMolecule.
+     *
+     * @return array An array of page class names mapped to their respective routes.
+     */
     public static function getPages(): array
     {
         return [
@@ -202,6 +246,14 @@ class MoleculeResource extends Resource
         ];
     }
 
+    /**
+     * Retrieves an array of widgets to be displayed on the dashboard for the MoleculeResource.
+     *
+     * This function returns a list of widget classes that define the widgets to be displayed
+     * on the dashboard for the Molecule resource, such as MoleculeStats.
+     *
+     * @return array An array of widget class names.
+     */
     public static function getWidgets(): array
     {
         return [
@@ -209,11 +261,31 @@ class MoleculeResource extends Resource
         ];
     }
 
+    /**
+     * Retrieves the number of molecules as a string to be displayed on the navigation bar.
+     *
+     * This function returns the number of molecules as a string to be displayed on the
+     * navigation bar, or null if the value is not cached.
+     *
+     * @return string|null The number of molecules as a string, or null.
+     */
     public static function getNavigationBadge(): ?string
     {
         return Cache::get('stats.molecules');
     }
 
+    /**
+     * Change the status of a molecule.
+     *
+     * This function changes the active status of a molecule and sets its status
+     * to either APPROVED or REVOKED. It also adds a comment to the molecule's
+     * comment attribute with the current timestamp, the user ID of the user who
+     * performed the action, and the reason for the change.
+     *
+     * @param  \App\Models\Molecule  $record  The molecule to be updated.
+     * @param  string  $reason  The reason for the status change.
+     * @return void
+     */
     public static function changeMoleculeStatus($record, $reason)
     {
         $record->active = ! $record->active;

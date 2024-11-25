@@ -13,18 +13,41 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateReport extends CreateRecord
 {
+    /**
+     * The resource the record belongs to.
+     */
     protected static string $resource = ReportResource::class;
 
+    /**
+     * Molecule which is being reported
+     */
     protected $molecule;
 
+    /**
+     * Is this a change report?
+     */
     protected $is_change = false;
 
+    /**
+     * Mol IDs CSV
+     */
     protected $mol_id_csv = null;
 
+    /**
+     * Report Type
+     */
     protected $report_type = null;
 
+    /**
+     * Evidence
+     */
     protected $evidence = null;
 
+    /**
+     * Returns the title of the report creation page.
+     *
+     * If the report is for a molecule, it appends the molecule's name and identifier to the title.
+     */
     public function getTitle(): string
     {
         $title = 'Create Report';
@@ -36,6 +59,12 @@ class CreateReport extends CreateRecord
         return __($title);
     }
 
+    /**
+     * Prepares the data before filling the form.
+     *
+     * Sets the 'type' in the data array based on the request type. If a 'compound_id' is present in the request,
+     * retrieves the corresponding Molecule instance and assigns it to the $molecule property.
+     */
     protected function beforeFill(): void
     {
         $this->data['type'] = request()->type;
@@ -45,6 +74,17 @@ class CreateReport extends CreateRecord
         }
     }
 
+    /**
+     * Sets the initial data for the form after the Livewire component has been hydrated.
+     *
+     * Sets the molecule's identifier and type based on the request. If the type is 'change', sets the existing
+     * synonyms, CAS numbers, geo locations, organisms, and citations for the molecule. Otherwise, sets the
+     * identifier and type to null. If a 'collection_uuid' is present in the request, adds the collection's ID to
+     * the 'collections' array. If a 'citation_id' is present in the request, adds the citation's ID to the
+     * 'citations' array. If a 'compound_id' is present in the request, sets the 'mol_id_csv' to the compound's
+     * identifier and sets the 'report_type' to 'molecule'. If an 'organism_id' is present in the request, adds the
+     * organism's ID to the 'organisms' array and sets the 'report_type' to 'organism'.
+     */
     protected function afterFill(): void
     {
         $request = request();
@@ -85,6 +125,9 @@ class CreateReport extends CreateRecord
         }
     }
 
+    /**
+     * Stores the validated data into class properties.
+     */
     protected function afterValidate(): void
     {
         $this->mol_id_csv = $this->data['mol_id_csv'];
@@ -93,6 +136,12 @@ class CreateReport extends CreateRecord
         $this->evidence = $this->data['evidence'];
     }
 
+    /**
+     * Prepare the validated data for creation.
+     *
+     * Depending on the selected report type, remove unnecessary fields
+     * from the validated data.
+     */
     protected function beforeCreate(): void
     {
         if ($this->data['report_type'] == 'collection') {
@@ -114,6 +163,19 @@ class CreateReport extends CreateRecord
         }
     }
 
+    /**
+     * Mutates the form data before creating a new record.
+     *
+     * Ensures that the record is assigned to the currently logged in user,
+     * sets the initial status to 'submitted', and adds the report type and
+     * evidence to the data.
+     *
+     * If the report is a change request, creates a suggested changes JSON
+     * object and adds it to the data.
+     *
+     * @param  array  $data  The form data to be mutated.
+     * @return array The mutated form data.
+     */
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['user_id'] = auth()->id();
@@ -162,6 +224,13 @@ class CreateReport extends CreateRecord
         return $data;
     }
 
+    /**
+     * Executes actions after a report is created.
+     *
+     * If the report includes a 'mol_id_csv', it retrieves the corresponding
+     * Molecule instances and associates them with the report. Dispatches a
+     * ReportSubmitted event after the report creation.
+     */
     protected function afterCreate(): void
     {
         if (! is_null($this->record->mol_id_csv)) {
@@ -176,6 +245,15 @@ class CreateReport extends CreateRecord
         ReportSubmitted::dispatch($this->record);
     }
 
+    /**
+     * Gets the action for the create form.
+     *
+     * If the report is a change report, overrides the default action to:
+     *  - hide the submit button
+     *  - display the changes in a table
+     *  - hide the modal when the 'is_change' property is false
+     *  - calls the parent create method when the action is triggered
+     */
     protected function getCreateFormAction(): Action
     {
         if (! $this->data['is_change']) {

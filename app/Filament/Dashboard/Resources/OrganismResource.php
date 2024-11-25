@@ -24,14 +24,37 @@ use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class OrganismResource extends Resource
 {
+    /**
+     * The nativation group to which the resource belongs.
+     */
     protected static ?string $navigationGroup = 'Data';
 
+    /**
+     * The sort order of the resource within the navigation group.
+     */
     protected static ?int $navigationSort = 4;
 
+    /**
+     * The model the resource corresponds to.
+     */
     protected static ?string $model = Organism::class;
 
+    /**
+     * Navigation icon for the resource.
+     */
     protected static ?string $navigationIcon = 'heroicon-o-bug-ant';
 
+    /**
+     * Configures the form schema for the Organism resource.
+     *
+     * This method sets up the form structure by defining a grid layout with two groups.
+     * Each group contains sections with specific schemas. The first group includes a section
+     * using the Organism's form schema, while the second group contains a custom table and
+     * conditionally hidden content based on the operation.
+     *
+     * @param  Form  $form  The form instance to be configured.
+     * @return Form The configured form instance with the defined schema.
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -63,6 +86,16 @@ class OrganismResource extends Resource
             ]);
     }
 
+    /**
+     * Defines the table schema used by the Organism resource.
+     *
+     * The table schema includes columns for the organism's name, rank, created and updated at timestamps,
+     * as well as a filter and actions for viewing, editing, and deleting records. The table also includes
+     * a bulk action group with a delete bulk action.
+     *
+     * @param  \Filament\Tables\Table  $table  The table instance to be configured.
+     * @return \Filament\Tables\Table The configured table instance with the defined schema.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -100,6 +133,11 @@ class OrganismResource extends Resource
             ]);
     }
 
+    /**
+     * Gets the relation managers for the Organism resource.
+     *
+     * @return array An array of relation manager class names associated with the Organism resource.
+     */
     public static function getRelations(): array
     {
         $arr = [
@@ -111,6 +149,15 @@ class OrganismResource extends Resource
         return $arr;
     }
 
+    /**
+     * Defines the pages used by the Organism resource.
+     *
+     * The pages include list, create, and edit pages that are used to manage the Organism records.
+     * The list page displays a table of all Organism records, the create page allows users to create
+     * new Organism records, and the edit page allows users to edit existing Organism records.
+     *
+     * @return array An associative array of page class names and their corresponding routes.
+     */
     public static function getPages(): array
     {
         return [
@@ -121,6 +168,14 @@ class OrganismResource extends Resource
         ];
     }
 
+    /**
+     * Gets the widgets to be displayed on the dashboard for the Organism resource.
+     *
+     * The widgets returned by this function are displayed on the dashboard and can be used to quickly
+     * view key metrics about the Organism records without having to leave the dashboard.
+     *
+     * @return array An array of widget class names associated with the Organism resource.
+     */
     public static function getWidgets(): array
     {
         return [
@@ -128,11 +183,25 @@ class OrganismResource extends Resource
         ];
     }
 
+    /**
+     * Returns the number of organisms in the database as a string.
+     *
+     * The value is cached for performance reasons.
+     *
+     * @return string|null The number of organisms in the database, or null if the cache key is not set.
+     */
     public static function getNavigationBadge(): ?string
     {
         return Cache::get('stats.organisms');
     }
 
+    /**
+     * Call the Global Names Finder API to map an organism name to an Open Tree of Life identifier.
+     *
+     * @param  string  $name  The organism name to map.
+     * @param  \App\Models\Organism  $organism  The organism model to update.
+     * @return array An array containing the organism name, the OGG IRI, the organism model, and the rank of the match.
+     */
     protected static function getGNFMatches($name, $organism)
     {
         $data = [
@@ -195,6 +264,17 @@ class OrganismResource extends Resource
         // }
     }
 
+    /**
+     * Updates an organism model in the database with the given name, IRI, and rank.
+     *
+     * If the organism is not found in the database, an error message will be logged.
+     *
+     * @param  string  $name  The organism name.
+     * @param  string  $iri  The organism IRI.
+     * @param  Organism|null  $organism  The organism model to update. If not provided, it will be retrieved from the database.
+     * @param  string|null  $rank  The organism rank. If not provided, it will not be updated.
+     * @return void
+     */
     protected static function updateOrganismModel($name, $iri, $organism = null, $rank = null)
     {
         if (! $organism) {
@@ -211,6 +291,17 @@ class OrganismResource extends Resource
         }
     }
 
+    /**
+     * Searches for an organism's IRI using the OLS API.
+     *
+     * This function makes a GET request to the OLS API, searching for the specified
+     * scientific name across multiple ontologies. The search results are returned
+     * as a JSON-decoded array.
+     *
+     * @param  string  $name  The scientific name of the organism to search for.
+     * @param  string  $rank  The taxonomic rank of the organism (e.g., species, genus, family).
+     * @return array|null The search results as an associative array, or null if an error occurs.
+     */
     protected static function getOLSIRI($name, $rank)
     {
         $client = new Client([
@@ -231,7 +322,6 @@ class OrganismResource extends Resource
             $data = json_decode($response->getBody(), true);
 
             return $data;
-            // var_dump($data);
 
             // if (isset($data['elements']) && count($data['elements']) > 0) {
 

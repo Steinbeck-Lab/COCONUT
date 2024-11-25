@@ -13,6 +13,9 @@ class EntryImporter extends Importer
 {
     protected static ?string $model = Entry::class;
 
+    /**
+     * Defines the columns that will be imported into the Entry model.
+     */
     public static function getColumns(): array
     {
         return [
@@ -31,6 +34,12 @@ class EntryImporter extends Importer
         ];
     }
 
+    /**
+     * Provides options for the importer form. The importer form is
+     * displayed when an import is initialized. The options provided
+     * here are stored in the Import model and can be accessed in
+     * the resolveRecord method.
+     */
     public static function getOptionsFormComponents(): array
     {
         return [
@@ -39,6 +48,19 @@ class EntryImporter extends Importer
         ];
     }
 
+    /**
+     * Resolves or creates an Entry record based on the import options.
+     *
+     * If the 'updateExisting' option is enabled, the method attempts to find
+     * an existing Entry using the canonical_smiles, reference_id, and
+     * collection_id attributes. If no existing Entry is found, a new one is
+     * initialized with these attributes.
+     *
+     * If the 'updateExisting' option is not enabled, a new Entry instance is
+     * created with the specified collection_id.
+     *
+     * @return Entry|null The resolved or newly created Entry instance.
+     */
     public function resolveRecord(): ?Entry
     {
         if ($this->options['updateExisting'] ?? false) {
@@ -55,6 +77,15 @@ class EntryImporter extends Importer
         return $entry;
     }
 
+    /**
+     * Gets the notification body for the completed import notification.
+     *
+     * Returns a string describing the outcome of the import. The string
+     * includes the number of rows that were imported.
+     *
+     * @param  Import  $import  The Import instance.
+     * @return string The notification body.
+     */
     public static function getCompletedNotificationBody(Import $import): string
     {
         ImportedCSVProcessed::dispatch($import);

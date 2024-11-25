@@ -10,14 +10,25 @@ use Filament\Tables\Table;
 
 class CitationsRelationManager extends RelationManager
 {
+    /**
+     * Get the displayable name of the relationship.
+     *
+     * @return string
+     */
     protected static string $relationship = 'citations';
 
+    /**
+     * Gets the form schema used by the relation manager.
+     */
     public function form(Form $form): Form
     {
         return $form
             ->schema([]);
     }
 
+    /**
+     * Configure the table for the relation manager.
+     */
     public function table(Table $table): Table
     {
         return $table

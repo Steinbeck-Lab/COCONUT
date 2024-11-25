@@ -9,14 +9,29 @@ use Filament\Tables\Table;
 
 class PropertiesRelationManager extends RelationManager
 {
+    /**
+     * The relationship name.
+     */
     protected static string $relationship = 'properties';
 
+    /**
+     * Defines the form schema for managing the properties relationship.
+     *
+     * @param  Form  $form  The form instance to be configured.
+     * @return Form The configured form instance.
+     */
     public function form(Form $form): Form
     {
         return $form
             ->schema([]);
     }
 
+    /**
+     * Defines the table schema of the relation manager.
+     *
+     * @param  \Filament\Tables\Table  $table  The table instance to be configured.
+     * @return \Filament\Tables\Table The configured table instance.
+     */
     public function table(Table $table): Table
     {
         return $table

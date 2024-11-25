@@ -7,5 +7,8 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateSampleLocation extends CreateRecord
 {
+    /**
+     * The resource instance.
+     */
     protected static string $resource = SampleLocationResource::class;
 }

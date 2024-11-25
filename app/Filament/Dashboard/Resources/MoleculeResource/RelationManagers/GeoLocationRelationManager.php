@@ -11,8 +11,14 @@ use Filament\Tables\Table;
 
 class GeoLocationRelationManager extends RelationManager
 {
+    /**
+     * Get the displayable label of the relationship.
+     */
     protected static string $relationship = 'geo_locations';
 
+    /**
+     * Get the form schema used for creating/updating the relationship.
+     */
     public function form(Form $form): Form
     {
         return $form
@@ -23,6 +29,9 @@ class GeoLocationRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Configure the table for the relation manager.
+     */
     public function table(Table $table): Table
     {
         return $table

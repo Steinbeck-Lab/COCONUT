@@ -12,12 +12,39 @@ use Filament\Tables\Table;
 
 class EntryResource extends Resource
 {
+    /**
+     * The model the resource corresponds to.
+     */
     protected static ?string $model = Entry::class;
 
+    /**
+     * Label for the resource.
+     */
+    protected static ?string $label = 'Entry';
+
+    /**
+     * The navigation group for the resource.
+     */
+    protected static ?string $navigationGroup = 'Entry';
+
+    /**
+     * Should the resource be registered in navigation.
+     */
     protected static bool $shouldRegisterNavigation = false;
 
+    /**
+     * Should the resource be registered in navigation.
+     */
+    protected static bool $shouldRegisterInNavigation = false;
+
+    /**
+     * Icon for the resource.
+     */
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    /**
+     * Get the table definition for the resource.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -38,6 +65,11 @@ class EntryResource extends Resource
             ]);
     }
 
+    /**
+     * Get the relation managers for the Entry resource.
+     *
+     * @return array An array of relation manager class names associated with the Entry resource.
+     */
     public static function getRelations(): array
     {
         return [
@@ -45,6 +77,11 @@ class EntryResource extends Resource
         ];
     }
 
+    /**
+     * Returns an array of the URLs for each page in the Entry resource.
+     *
+     * @return array An array of page URLs associated with the Entry resource.
+     */
     public static function getPages(): array
     {
         return [
@@ -55,6 +92,15 @@ class EntryResource extends Resource
         ];
     }
 
+    /**
+     * Returns an infolist schema for the Entry resource.
+     *
+     * An infolist is a set of components that can be used to display information
+     * about a resource on a details page or in a table.
+     *
+     * @param  Infolist  $infolist  The infolist instance to configure.
+     * @return Infolist The configured infolist instance.
+     */
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist

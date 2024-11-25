@@ -8,8 +8,16 @@ use Filament\Resources\Pages\ViewRecord;
 
 class ViewGeoLocation extends ViewRecord
 {
+    /**
+     * The resource the record belongs to.
+     */
     protected static string $resource = GeoLocationResource::class;
 
+    /**
+     * Returns an array of widgets to be displayed in the header.
+     *
+     * @return array An array of header widgets.
+     */
     protected function getHeaderWidgets(): array
     {
         return [

@@ -29,16 +29,39 @@ use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class CollectionResource extends Resource
 {
+    /**
+     * The model the resource corresponds to.
+     */
     protected static ?string $model = Collection::class;
 
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     */
+    protected static ?string $titleAttribute = 'title';
+
+    /**
+     * The navigation group that the resource should be placed in.
+     */
     protected static ?string $navigationGroup = 'Data';
 
+    /**
+     * The sort order of the resource in the navigation.
+     */
     protected static ?int $navigationSort = 1;
 
+    /**
+     * The navigation icon for the resource.
+     */
     protected static ?string $navigationIcon = 'heroicon-o-swatch';
 
+    /**
+     * The record title attribute.
+     */
     protected static ?string $recordTitleAttribute = 'title';
 
+    /**
+     * Get the form schema for the resource.
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -87,6 +110,9 @@ class CollectionResource extends Resource
             )->columns(1);
     }
 
+    /**
+     * The table schema for the resource.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -129,6 +155,11 @@ class CollectionResource extends Resource
             ->defaultPaginationPageOption(100);
     }
 
+    /**
+     * Get the relation managers for the Collection resource.
+     *
+     * @return array An array of relation manager class names associated with the Collection resource.
+     */
     public static function getRelations(): array
     {
         $arr = [
@@ -141,6 +172,11 @@ class CollectionResource extends Resource
         return $arr;
     }
 
+    /**
+     * Returns an array of the URLs for each page in the Collection resource.
+     *
+     * @return array An array of page URLs associated with the Collection resource.
+     */
     public static function getPages(): array
     {
         return [
@@ -151,6 +187,11 @@ class CollectionResource extends Resource
         ];
     }
 
+    /**
+     * Get the widgets available on the resource.
+     *
+     * @return array An array of widget class names associated with the Collection resource.
+     */
     public static function getWidgets(): array
     {
         return [
@@ -159,6 +200,11 @@ class CollectionResource extends Resource
         ];
     }
 
+    /**
+     * Get the navigation badge for the Collection resource.
+     *
+     * @return string|null The navigation badge value, or null if not available.
+     */
     public static function getNavigationBadge(): ?string
     {
         return Cache::get('stats.collections');

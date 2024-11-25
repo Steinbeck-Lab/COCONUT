@@ -11,8 +11,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrganismsRelationManager extends RelationManager
 {
+    /**
+     * The name of the relationship.
+     */
     protected static string $relationship = 'organisms';
 
+    /**
+     * The form schema used by the relation manager.
+     */
     public function form(Form $form): Form
     {
         return $form
@@ -23,6 +29,9 @@ class OrganismsRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * The table schema used by the relation manager.
+     */
     public function table(Table $table): Table
     {
         return $table
@@ -47,6 +56,17 @@ class OrganismsRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Determine if the record can be viewed for the given page class.
+     *
+     * This method checks if the report type of the owner record is 'organism'.
+     * If it is, the method returns true, allowing the record to be viewed;
+     * otherwise, it returns false.
+     *
+     * @param  Model  $ownerRecord  The record being checked.
+     * @param  string  $pageClass  The class of the page where the record is being viewed.
+     * @return bool True if the record can be viewed, false otherwise.
+     */
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
     {
         if ($ownerRecord->report_type === 'organism') {

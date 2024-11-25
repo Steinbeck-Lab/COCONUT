@@ -10,8 +10,19 @@ use Illuminate\Support\Facades\DB;
 
 class MoleculeStats extends BaseWidget
 {
+    /**
+     * Molecule to show stats for.
+     */
     public ?Molecule $record = null;
 
+    /**
+     * Retrieves an array of statistics for the molecule record.
+     *
+     * This method returns a list of statistics, each represented as a Stat object.
+     * It provides counts for molecules and organisms associated with the molecule record.
+     *
+     * @return array An array of Stat objects representing various statistics.
+     */
     protected function getStats(): array
     {
         return [

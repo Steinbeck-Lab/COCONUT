@@ -11,8 +11,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class CollectionsRelationManager extends RelationManager
 {
+    /**
+     * The relationship name.
+     */
     protected static string $relationship = 'collections';
 
+    /**
+     * Defines the form schema for the Collections relation manager.
+     *
+     * @param  \Filament\Forms\Form  $form  The form instance.
+     * @return \Filament\Forms\Form The configured form instance.
+     */
     public function form(Form $form): Form
     {
         return $form
@@ -23,6 +32,9 @@ class CollectionsRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Configure the table for the relation manager.
+     */
     public function table(Table $table): Table
     {
         return $table
@@ -48,6 +60,17 @@ class CollectionsRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Determine if the record can be viewed for the given page class.
+     *
+     * This method checks if the report type of the owner record is 'collection'.
+     * If it is, the method returns true, allowing the record to be viewed;
+     * otherwise, it returns false.
+     *
+     * @param  Model  $ownerRecord  The record being checked.
+     * @param  string  $pageClass  The class of the page where the record is being viewed.
+     * @return bool True if the record can be viewed, false otherwise.
+     */
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
     {
         if ($ownerRecord->report_type === 'collection') {

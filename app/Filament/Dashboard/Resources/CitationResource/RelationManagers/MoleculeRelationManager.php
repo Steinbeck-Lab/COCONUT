@@ -9,8 +9,14 @@ use Filament\Tables\Table;
 
 class MoleculeRelationManager extends RelationManager
 {
+    /**
+     * The relationship name.
+     */
     protected static string $relationship = 'molecules';
 
+    /**
+     * Defines the form schema of the relation manager.
+     */
     public function form(Form $form): Form
     {
         return $form
@@ -18,6 +24,9 @@ class MoleculeRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * The table schema of the relation manager.
+     */
     public function table(Table $table): Table
     {
         return $table
