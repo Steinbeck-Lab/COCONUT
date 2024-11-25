@@ -30,7 +30,17 @@ class SearchMolecule
     public $citations = null;
 
     /**
-     * Search based on given query.
+     * Run a search query against the Coconut database.
+     *
+     * @param  string  $query  The search query
+     * @param  int  $size  The number of results to return
+     * @param  string  $type  The type of query (e.g. SMILES, InChI, etc.)
+     * @param  string  $sort  The column to sort on (e.g. similarity, etc.)
+     * @param  string  $tagType  The type of tag to search on (e.g. organisms, etc.)
+     * @param  int  $page  The page number to return (optional)
+     * @return array An array containing the search results, the collection of molecules (if any), and the organisms (if any)
+     *
+     * @throws \Illuminate\Database\QueryException
      */
     public function query($query, $size, $type, $sort, $tagType, $page)
     {
@@ -81,6 +91,9 @@ class SearchMolecule
 
     /**
      * Determine the query type based on the query pattern.
+     *
+     * @param  string  $query  The query to check
+     * @return string The query type
      */
     private function determineQueryType($query)
     {
@@ -114,6 +127,8 @@ class SearchMolecule
 
     /**
      * Return a mapping of filter codes to database columns.
+     *
+     * @return array A map of filter codes to database columns
      */
     private function getFilterMap()
     {
@@ -155,6 +170,11 @@ class SearchMolecule
 
     /**
      * Build the SQL statement based on the query type.
+     *
+     * @param  string  $queryType  The query type
+     * @param  int  $offset  The offset
+     * @param  array  $filterMap  A map of filter codes to database columns
+     * @return string The SQL statement
      */
     private function buildStatement($queryType, $offset, $filterMap)
     {
@@ -223,6 +243,9 @@ class SearchMolecule
 
     /**
      * Build the SQL statement for 'tags' query type.
+     *
+     * @param  int  $offset  The offset
+     * @return string The SQL statement
      */
     private function buildTagsStatement($offset)
     {
@@ -264,6 +287,9 @@ class SearchMolecule
 
     /**
      * Build the SQL statement for 'filters' query type.
+     *
+     * @param  array  $filterMap  The map of filter codes to database columns
+     * @return string The SQL statement
      */
     private function buildFiltersStatement($filterMap)
     {
@@ -309,6 +335,9 @@ class SearchMolecule
 
     /**
      * Build the default SQL statement.
+     *
+     * @param  int  $offset  The offset
+     * @return string The SQL statement
      */
     private function buildDefaultStatement($offset)
     {
@@ -346,6 +375,9 @@ class SearchMolecule
 
     /**
      * Execute the given SQL statement and return the results.
+     *
+     * @param  string  $statement  The SQL statement
+     * @return LengthAwarePaginator The results
      */
     private function executeQuery($statement)
     {
@@ -379,6 +411,9 @@ class SearchMolecule
 
     /**
      * Handle exceptions by returning a proper JSON response.
+     *
+     * @param  QueryException  $exception  The exception
+     * @return JsonResponse The JSON response
      */
     private function handleException(QueryException $exception)
     {
