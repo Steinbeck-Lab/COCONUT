@@ -26,7 +26,17 @@ class OrganismDedupeOptions extends Command
     protected $description = 'Find and handle duplicate records in the Organisms (case-insensitive)';
 
     /**
-     * Execute the console command.
+     * Execute the console command to update missing slugs and handle duplicate records in the organisms.
+     *
+     * This method performs the following operations:
+     * 1. Updates missing slugs for organisms by generating them from their names.
+     * 2. Identifies duplicate records in the organisms based on their slugs and molecule counts.
+     * 3. Interactively allows the user to resolve duplicates by selecting which record to retain.
+     *    - Reassigns molecules from the duplicate organisms to the selected record.
+     *    - Deletes the duplicate organisms that have been processed.
+     * 4. Provides informational output to guide the user through the deduplication process.
+     *
+     * @return int
      */
     public function handle()
     {

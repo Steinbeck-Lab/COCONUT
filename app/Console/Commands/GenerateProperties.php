@@ -26,6 +26,13 @@ class GenerateProperties extends Command
 
     /**
      * Execute the console command.
+     *
+     * This command processes all active molecules in the database, generates properties
+     * for each molecule, and updates the database with the generated properties. The
+     * processing is done in chunks to efficiently handle large datasets without
+     * exhausting memory.
+     *
+     * @return void
      */
     public function handle()
     {

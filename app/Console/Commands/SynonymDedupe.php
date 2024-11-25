@@ -24,6 +24,14 @@ class SynonymDedupe extends Command
 
     /**
      * Execute the console command.
+     *
+     * This command goes through all molecules and deduplicates their synonyms.
+     * This is done by going through each molecule, decoding its synonyms JSON array,
+     * then using the removeSimilarStrings method to deduplicate the array.
+     * If the deduplicated array is different from the original array, the command
+     * will update the synonyms column of the molecule with the deduplicated array.
+     *
+     * @return int
      */
     public function handle()
     {
@@ -68,6 +76,13 @@ class SynonymDedupe extends Command
             });
     }
 
+    /**
+     * Removes similar strings from the provided synonyms array.
+     * Uses a similarity threshold (default 90) to determine if two strings are similar.
+     *
+     * @param  array  $synonyms
+     * @return array
+     */
     public function removeSimilarStrings($synonyms)
     {
         $uniqueSynonyms = [];

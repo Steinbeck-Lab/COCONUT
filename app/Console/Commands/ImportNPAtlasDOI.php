@@ -24,7 +24,16 @@ class ImportNPAtlasDOI extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Execute the console command to import NPAtlas DOI data from a file.
+     *
+     * This method performs the following steps:
+     * 1. Validates the presence and readability of the input file.
+     * 2. Reads the file as a comma-separated values (CSV) format.
+     * 3. Collects data in batches and updates the `citation` table.
+     * 4. Logs an error if the file is not found or not readable.
+     * 5. Outputs the success message upon completion.
+     *
+     * @return int Returns 0 on successful import, or 1 if the file is not found or not readable.
      */
     public function handle()
     {

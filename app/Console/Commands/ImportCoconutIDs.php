@@ -23,7 +23,16 @@ class ImportCoconutIDs extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Execute the console command to import Coconut IDs from a specified file.
+     *
+     * This method performs the following steps:
+     * 1. Validates the presence and readability of the input file.
+     * 2. Reads the file and parses it as a tab-separated values (TSV) format.
+     * 3. Collects data in batches and inserts them into the database.
+     * 4. Logs an error if the file is not found or not readable.
+     * 5. Outputs the success message upon completion.
+     *
+     * @return int Returns 0 on successful import, or 1 if the file is not found or not readable.
      */
     public function handle()
     {

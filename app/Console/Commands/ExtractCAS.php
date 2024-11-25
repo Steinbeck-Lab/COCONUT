@@ -23,7 +23,16 @@ class ExtractCAS extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Handle the command.
+     *
+     * This command is responsible for mapping CAS registry numbers to molecules.
+     * It does this in two steps:
+     * 1. It finds all molecules with null cas and not null synonyms, and extracts
+     * the CAS registry numbers from the synonyms.
+     * 2. It finds all molecules with not null cas, and removes any CAS registry
+     * numbers that start with "InChI", and removes any duplicates.
+     *
+     * @return void
      */
     public function handle()
     {

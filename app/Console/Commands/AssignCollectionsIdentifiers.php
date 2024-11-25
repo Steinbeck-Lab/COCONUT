@@ -25,6 +25,8 @@ class AssignCollectionsIdentifiers extends Command
 
     /**
      * Execute the console command.
+     *
+     * @return void
      */
     public function handle()
     {
@@ -48,6 +50,12 @@ class AssignCollectionsIdentifiers extends Command
         $this->info('Assigning identifiers to collections: Done');
     }
 
+    /**
+     * Generates a unique identifier for a collection
+     *
+     * @param  int  $index  An incrementing index
+     * @return string A unique identifier for a collection
+     */
     public function generateIdentifier($index)
     {
         return 'CNPC'.str_pad($index, 4, '0', STR_PAD_LEFT);

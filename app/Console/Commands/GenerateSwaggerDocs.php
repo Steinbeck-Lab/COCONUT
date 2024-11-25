@@ -23,6 +23,12 @@ class GenerateSwaggerDocs extends Command
 
     /**
      * Execute the console command.
+     *
+     * This command will generate the openapi api documentation
+     * and then modify the openapi.json file to include the
+     * publicly accessible endpoints.
+     *
+     * @return int
      */
     public function handle()
     {
@@ -35,6 +41,13 @@ class GenerateSwaggerDocs extends Command
 
     }
 
+    /**
+     * Modifies the openapi.json file to add security sanctum for all endpoints not in the $filterPaths array
+     *
+     * @param  array  $filterPaths  paths that should not be modified
+     * @param  string  $filePath  location of the openapi.json file
+     * @return void
+     */
     public function modifyOpenAPIJsonFile($filterPaths = [], $filePath = 'vendor/rest/openapi.json')
     {
         $jsonFilePath = public_path($filePath);

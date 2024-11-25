@@ -23,6 +23,11 @@ class CopyNameToSynonym extends Command
 
     /**
      * Execute the console command.
+     *
+     * This command will go through all entries that have a name, and
+     * add that name to the synonyms array for the associated molecule.
+     *
+     * @return int
      */
     public function handle()
     {

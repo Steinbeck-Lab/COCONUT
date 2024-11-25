@@ -24,7 +24,16 @@ class ImportSTOUTIUPACNames extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Execute the console command to import STOUT IUPAC names from a file.
+     *
+     * This method performs the following steps:
+     * 1. Checks if the specified file exists and is readable.
+     * 2. Reads the file as a comma-separated values (CSV) format.
+     * 3. Processes the data in batches and inserts it into the database.
+     * 4. Logs any errors encountered during processing.
+     * 5. Outputs a success message upon completion.
+     *
+     * @return int Returns 0 on successful import, or 1 if the file is not found or not readable.
      */
     public function handle()
     {

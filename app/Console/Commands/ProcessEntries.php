@@ -27,7 +27,14 @@ class ProcessEntries extends Command
     protected $description = 'Process the entries using cheminformatics microservice';
 
     /**
-     * Execute the console command.
+     * Execute the console command to process entries.
+     *
+     * This method retrieves collection IDs for entries with the 'SUBMITTED' status,
+     * updates the job status to 'PROCESSING', and dispatches batch jobs to process
+     * entries using the cheminformatics microservice. Once processing is completed,
+     * it sets the job status to 'INCURATION' and triggers the import process.
+     *
+     * @return void
      */
     public function handle()
     {

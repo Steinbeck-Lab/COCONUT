@@ -24,7 +24,16 @@ class ImportNPClassifierOutput extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Execute the console command to import NPClassifier output from a file.
+     *
+     * This method performs the following steps:
+     * 1. Validates the presence and readability of the input file.
+     * 2. Reads the file as a tab-separated values (TSV) format.
+     * 3. Collects data in batches and inserts it into the database.
+     * 4. Logs and outputs the number of rows inserted.
+     * 5. Returns 0 on successful import, or 1 if the file is not found or not readable.
+     *
+     * @return int Returns 0 on successful import, or 1 if the file is not found or not readable.
      */
     public function handle()
     {

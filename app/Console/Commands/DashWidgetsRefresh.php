@@ -25,6 +25,10 @@ class DashWidgetsRefresh extends Command
 
     /**
      * Execute the console command.
+     *
+     * This command refreshes the cache for all the widgets in the dashboard.
+     *
+     * @return int
      */
     public function handle()
     {

@@ -9,12 +9,33 @@ use Log;
 
 class MapOrganismNamesToOGG extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'coconut:organisms-map-ogg';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'Map organism names to OGG IRIs and update the model';
 
+    /**
+     * The HTTP client.
+     *
+     * @var string
+     */
     protected $client;
 
+    /**
+     * MapOrganismNamesToOGG constructor.
+     *
+     * Initializes the console command and sets up the HTTP client
+     * with the base URI for the OLS API.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -25,6 +46,17 @@ class MapOrganismNamesToOGG extends Command
 
     /**
      * Execute the console command.
+     *
+     * Deletes any organisms that do not have molecules associated with them.
+     * Then, it takes the remaining organisms and attempts to map their names
+     * to OGG IRIs. If successful, the organism model is updated with the
+     * new information.
+     *
+     * If mapping to OGG fails, the organism name is sent to the GNF API
+     * to see if it can be matched to a name in the GNF database. If so,
+     * the organism model is updated with the new information.
+     *
+     * @return void
      */
     public function handle()
     {
@@ -66,6 +98,13 @@ class MapOrganismNamesToOGG extends Command
         });
     }
 
+    /**
+     * Call the Global Names Finder API to map an organism name to an Open Tree of Life identifier.
+     *
+     * @param  string  $name  The organism name to map.
+     * @param  \App\Models\Organism  $organism  The organism model to update.
+     * @return void
+     */
     protected function getGNFMatches($name, $organism)
     {
         // echo $name .  "\n";;
@@ -130,6 +169,18 @@ class MapOrganismNamesToOGG extends Command
 
     }
 
+    /**
+     * Maps a scientific name to an Open Linking for Science (OLS) IRI.
+     *
+     * Makes a request to the OLS API to search for the given scientific name and returns the IRI of the
+     * matching ontology term if it is found. If the given rank is 'species', 'genus', or 'family', the
+     * method will only return the IRI if the rank of the matching term matches the given rank. If no match
+     * is found, the method will return null.
+     *
+     * @param  string  $name  The scientific name to search for.
+     * @param  string  $rank  The rank of the term to search for (species, genus, family).
+     * @return string|null The IRI of the matching term, or null if no match is found.
+     */
     protected function getOLSIRI($name, $rank)
     {
         try {

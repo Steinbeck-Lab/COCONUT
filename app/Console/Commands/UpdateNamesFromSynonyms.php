@@ -22,7 +22,14 @@ class UpdateNamesFromSynonyms extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Execute the console command to update molecule names.
+     *
+     * This command will process molecules that currently have no name
+     * but have a non-empty synonyms array. It will set the molecule's
+     * name to the first synonym in the array. The update is performed
+     * in chunks for efficiency.
+     *
+     * @return void
      */
     public function handle()
     {

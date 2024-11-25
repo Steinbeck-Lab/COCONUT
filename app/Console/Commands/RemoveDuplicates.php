@@ -23,7 +23,16 @@ class RemoveDuplicates extends Command
     protected $description = 'Removes duplicate molecules from the database by merging associated data and marking duplicates.';
 
     /**
-     * Execute the console command.
+     * Execute the console command to remove duplicate molecules based on different criteria.
+     *
+     * This method processes molecules by categorizing them into three types:
+     * 1. Flat molecules: Non-parent molecules without stereo information.
+     * 2. Parent molecules: Parent molecules without stereo information.
+     * 3. Stereo molecules: Non-parent molecules with stereo information.
+     *
+     * Each category is processed to merge associated data and mark duplicates.
+     *
+     * @return void
      */
     public function handle()
     {
