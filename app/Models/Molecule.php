@@ -293,6 +293,11 @@ class Molecule extends Model implements Auditable
         }
     }
 
+    /**
+     * Prepares and returns the "conformsTo" schema for a MolecularEntity profile.
+     *
+     * @return array The prepared conformsTo schema.
+     */
     public function prepareConformsTo()
     {
         $creativeWork = Schema::creativeWork();

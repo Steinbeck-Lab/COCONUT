@@ -21,16 +21,32 @@ class GeoLocation extends Model implements Auditable
         'name',
     ];
 
+    /**
+     * Get all of the molecules that are associated with the GeoLocation
+     *
+     * @return BelongsToMany
+     */
     public function molecules()
     {
         return $this->belongsToMany(Molecule::class)->withPivot('locations')->withTimestamps();
     }
 
+    /**
+     * Transforms the audit data by applying a custom function to the provided array.
+     *
+     * @param  array  $data  The audit data to transform.
+     * @return array The transformed audit data.
+     */
     public function transformAudit(array $data): array
     {
         return changeAudit($data);
     }
 
+    /**
+     * Returns the form schema with fields for name.
+     *
+     * @return array The form schema.
+     */
     public static function getForm(): array
     {
         return [

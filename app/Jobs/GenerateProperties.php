@@ -57,6 +57,17 @@ class GenerateProperties implements ShouldQueue
         }
     }
 
+    /**
+     * Attach properties to a molecule.
+     *
+     * Given a set of descriptors from the API and a molecule ID, this function
+     * will create or update the corresponding Properties model with the given
+     * descriptors.
+     *
+     * @param  array  $descriptors
+     * @param  int  $id
+     * @return void
+     */
     public function attachProperties($descriptors, $id)
     {
         $properties = Properties::firstOrCreate(['molecule_id' => $id]);

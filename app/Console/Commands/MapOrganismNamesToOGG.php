@@ -222,6 +222,21 @@ class MapOrganismNamesToOGG extends Command
         return null;
     }
 
+    /**
+     * Update an organism model in the database with new information.
+     *
+     * Given an organism name, an OGG IRI, and optionally an organism model
+     * and a rank, update the organism model in the database with new
+     * information. If the organism model does not exist in the database, but
+     * the IRI is valid, create a new organism model. If the organism model does
+     * not exist in the database and the IRI is not valid, log an error.
+     *
+     * @param  string  $name  The organism name to update.
+     * @param  string  $iri  The OGG IRI to update the organism with.
+     * @param  \App\Models\Organism  $organism  The organism model to update.
+     * @param  string  $rank  The taxonomic rank to update the organism with.
+     * @return void
+     */
     protected function updateOrganismModel($name, $iri, $organism = null, $rank = null)
     {
         if (! $organism) {

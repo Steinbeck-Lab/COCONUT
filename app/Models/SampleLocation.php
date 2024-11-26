@@ -27,20 +27,37 @@ class SampleLocation extends Model implements Auditable
         'molecule_count',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
         'collection_ids' => 'array',
     ];
 
+    /**
+     * Get the organism that exists in the sample location.
+     */
     public function organisms(): HasOne
     {
         return $this->hasOne(Organism::class);
     }
 
+    /**
+     * Get the molecules that belong to the sample location.
+     */
     public function molecules(): BelongsToMany
     {
         return $this->belongsToMany(Molecule::class)->withTimestamps();
     }
 
+    /**
+     * Transforms the audit data by applying a custom function to the provided array.
+     *
+     * @param  array  $data  The audit data to transform.
+     * @return array The transformed audit data.
+     */
     public function transformAudit(array $data): array
     {
         return changeAudit($data);

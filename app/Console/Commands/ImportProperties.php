@@ -25,6 +25,15 @@ class ImportProperties extends Command
 
     /**
      * Execute the console command.
+     *
+     * This method performs the following steps:
+     * 1. Checks if the specified file exists and is readable.
+     * 2. Reads the file as a tab-separated values (TSV) format.
+     * 3. Processes the data in batches and inserts it into the database.
+     * 4. Logs and outputs the number of rows inserted.
+     * 5. Returns 0 on successful import, or 1 if the file is not found or not readable.
+     *
+     * @return int
      */
     public function handle()
     {

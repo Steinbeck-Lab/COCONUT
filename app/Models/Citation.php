@@ -54,11 +54,22 @@ class Citation extends Model implements Auditable
         return $this->morphToMany(Report::class, 'reportable');
     }
 
+    /**
+     * Transforms the audit data by applying a custom function to the provided array.
+     *
+     * @param  array  $data  The audit data to transform.
+     * @return array The transformed audit data.
+     */
     public function transformAudit(array $data): array
     {
         return changeAudit($data);
     }
 
+    /**
+     * Returns the form schema with fields for DOI and citation details.
+     *
+     * @return array The form schema.
+     */
     public static function getForm(): array
     {
         return [

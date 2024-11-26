@@ -14,6 +14,11 @@ class LinkedSocialAccount extends Model
         'provider_id',
     ];
 
+    /**
+     * Get the user that owns the linked social account.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class);

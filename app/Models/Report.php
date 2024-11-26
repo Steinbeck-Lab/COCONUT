@@ -36,6 +36,11 @@ class Report extends Model implements Auditable
         'doi',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
         'suggested_changes' => 'array',
     ];
@@ -64,15 +69,21 @@ class Report extends Model implements Auditable
         return $this->morphedByMany(Citation::class, 'reportable');
     }
 
+    /**
+     * Get all of the organisms that are assigned this report.
+     */
     public function organisms(): MorphToMany
     {
         return $this->morphedByMany(Organism::class, 'reportable');
     }
 
-    // public function geoLocations(): MorphToMany
-    // {
-    //     return $this->morphedByMany(Organism::class, 'reportable');
-    // }
+    /**
+     * Get all of the geoLocations that are assigned this report.
+     */
+    public function geoLocations(): MorphToMany
+    {
+        return $this->morphedByMany(Organism::class, 'reportable');
+    }
 
     /**
      * Get all of the users that are assigned this report.
@@ -82,11 +93,20 @@ class Report extends Model implements Auditable
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get all of the users that are assigned this report.
+     */
     public function curator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
+    /**
+     * Transforms the audit data by applying a custom function to the provided array.
+     *
+     * @param  array  $data  The audit data to transform.
+     * @return array The transformed audit data.
+     */
     public function transformAudit(array $data): array
     {
         return changeAudit($data);
