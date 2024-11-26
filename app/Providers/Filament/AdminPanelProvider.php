@@ -25,6 +25,9 @@ use Stephenjude\FilamentDebugger\DebuggerPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
+    /**
+     * Define the admin panel for the application.
+     */
     public function panel(Panel $panel): Panel
     {
         return $panel

@@ -6,6 +6,15 @@ use Filament\Forms\Components\KeyValue;
 use Illuminate\Support\Facades\Event;
 use OwenIt\Auditing\Events\AuditCustom;
 
+/**
+ * Normalize a given score to a new scale.
+ *
+ * This function takes an old score value and normalizes it from an
+ * old range of [-4.5, 4.5] to a new range of [0, 30].
+ *
+ * @param  float  $old_value  The original score to be normalized.
+ * @return float The normalized score within the new range.
+ */
 function npScore($old_value)
 {
     $old_min = -4.5;
@@ -16,6 +25,11 @@ function npScore($old_value)
     return ($old_value - $old_min) / ($old_max - $old_min) * ($new_max - $new_min) + $new_min;
 }
 
+/**
+ * Get the available report types.
+ *
+ * @return array An associative array of report types.
+ */
 function getReportTypes()
 {
     return [
@@ -26,6 +40,12 @@ function getReportTypes()
     ];
 }
 
+/**
+ * Check if the given string matches a DOI regex pattern.
+ *
+ * @param  string  $doi  The string to be checked
+ * @return int 1 if the string matches the DOI regex, 0 if not
+ */
 function doiRegxMatch($doi)
 {
     $doiRegex = '/\b(10[.][0-9]{4,}(?:[.][0-9]+)*)\b/';
@@ -33,6 +53,13 @@ function doiRegxMatch($doi)
     return preg_match($doiRegex, $doi);
 }
 
+/**
+ * Fetch citation information from external APIs (EuropePMC, CrossRef, DataCite)
+ * or internal CoconutDB.
+ *
+ * @param  string  $doi  The DOI of the citation to be fetched.
+ * @return array|null The citation information or null if no information is found.
+ */
 function fetchDOICitation($doi)
 {
     $citationResponse = null;
@@ -73,6 +100,13 @@ function fetchDOICitation($doi)
     return $citationResponse;
 }
 
+/**
+ * Make an HTTP request to a given URL.
+ *
+ * @param  string  $url
+ * @param  array  $params
+ * @return mixed
+ */
 function makeRequest($url, $params = [])
 {
     try {
@@ -87,6 +121,13 @@ function makeRequest($url, $params = [])
     }
 }
 
+/**
+ * Format citation response based on API type.
+ *
+ * @param  mixed  $obj
+ * @param  string  $apiType
+ * @return array
+ */
 function formatCitationResponse($obj, $apiType)
 {
     $journalTitle = '';
@@ -153,6 +194,15 @@ function formatCitationResponse($obj, $apiType)
     return $formattedCitationRes;
 }
 
+/**
+ * Trigger a custom audit log event for a given model object or array of model objects.
+ *
+ * @param  string  $event_type  The name of the custom event.
+ * @param  mixed  $model_objects  A single model object or an array of model objects that the event should be triggered for.
+ * @param  string  $column_name  The name of the column/attribute that the event is related to.
+ * @param  mixed  $currentValue  The current value of the column/attribute.
+ * @param  mixed  $newValue  The new value of the column/attribute.
+ */
 function customAuditLog($event_type, $model_objects, $column_name, $currentValue, $newValue)
 {
     foreach ($model_objects as $model_object) {
@@ -168,6 +218,18 @@ function customAuditLog($event_type, $model_objects, $column_name, $currentValue
     }
 }
 
+/**
+ * Modifies the audit data with additional user information and formats changes.
+ *
+ * This function updates the audit data with default user information if not
+ * provided, and processes specific event types ('re-assign', 'detach', 'attach',
+ * 'sync') to format old and new values. It only considers changes to specific
+ * whitelisted fields ('name', 'title') and appends identifier information to
+ * these fields.
+ *
+ * @param  array  $data  The audit data containing event details and changes.
+ * @return array The modified audit data with flattened old and new values.
+ */
 function changeAudit(array $data): array
 {
     // set the user_id and user_type if they are null (commands)
@@ -218,6 +280,13 @@ function changeAudit(array $data): array
     return $data;
 }
 
+/**
+ * Flatten a multi-dimensional associative array into a single level.
+ *
+ * @param  array  $array  The array to flatten.
+ * @param  string  $prefix  [optional] A prefix to add to the keys.
+ * @return array The flattened array.
+ */
 function flattenArray(array $array, $prefix = ''): array
 {
     $result = [];
@@ -238,6 +307,15 @@ function flattenArray(array $array, $prefix = ''): array
     return $result;
 }
 
+/**
+ * Return key values to display in a modal for changes made to a record.
+ *
+ * Given an array of data returned by the getOverallChanges function, this
+ * function will format the data into key values to be displayed in a modal.
+ *
+ * @param  array  $data  The array of data returned by the getOverallChanges function.
+ * @return array The array of formatted key values.
+ */
 function getChangesToDisplayModal($data)
 {
     $key_values = [];
@@ -262,6 +340,17 @@ function getChangesToDisplayModal($data)
     return $key_values;
 }
 
+/**
+ * Calculates the overall changes for a molecule based on provided data.
+ *
+ * This function compares the existing attributes of a molecule, such as
+ * geo locations, synonyms, name, CAS numbers, organisms, and citations,
+ * with the new data provided. It identifies deletions and additions
+ * for each attribute and organizes these changes in a structured array.
+ *
+ * @param  array  $data  The array of data containing new and existing attributes for the molecule.
+ * @return array The array detailing the changes to be made, including deletions and additions for each attribute.
+ */
 function getOverallChanges($data)
 {
     $overall_changes = [];
@@ -380,6 +469,19 @@ function getOverallChanges($data)
     return $overall_changes;
 }
 
+/**
+ * Copies changes from the form data to the curator's suggested changes in the record.
+ *
+ * This function takes a report record and form data, and updates the record's
+ * suggested changes for the curator with the provided form data. If the form data
+ * does not contain a particular change, the existing value in the record is retained.
+ * The function handles changes for geo locations, synonyms, name, CAS numbers,
+ * organisms, and citations.
+ *
+ * @param  $record  The report record containing the existing suggested changes.
+ * @param  array  $data  The form data with new changes for the curator.
+ * @return array The updated data with the curator's suggested changes.
+ */
 function copyChangesToCuratorJSON($record, $data)
 {
     $temp = $data;
@@ -411,6 +513,13 @@ function copyChangesToCuratorJSON($record, $data)
     return $data;
 }
 
+/**
+ * Prepares a comment for the reports table with the current timestamp and
+ * the user that made the change.
+ *
+ * @param  string  $reason  The reason for the change.
+ * @return array The comment array.
+ */
 function prepareComment($reason)
 {
     return [[
@@ -420,6 +529,16 @@ function prepareComment($reason)
     ]];
 }
 
+/**
+ * Converts italics notation in the given text.
+ *
+ * This function takes a string and replaces all occurrences of
+ * the pattern `~{text}` with `<i>text</i>` using regular expressions.
+ * It is useful for converting custom italics syntax to HTML italics tags.
+ *
+ * @param  string  $text  The text containing custom italics notation.
+ * @return string The text with HTML italics tags.
+ */
 function convert_italics_notation($text)
 {
     // Use preg_replace to replace ~{text} with <i>text</i>
@@ -428,6 +547,17 @@ function convert_italics_notation($text)
     return $converted_text;
 }
 
+/**
+ * Removes custom italics notation from the given text.
+ *
+ * This function takes a string and replaces all occurrences of
+ * the pattern `~{text}` with `text` using regular expressions.
+ * It is useful for converting HTML italics tags back to custom
+ * italics syntax.
+ *
+ * @param  string  $text  The text containing custom italics notation.
+ * @return string The text without custom italics notation.
+ */
 function remove_italics_notation($text)
 {
     // Use preg_replace to find all instances of ~{something} and replace with just something

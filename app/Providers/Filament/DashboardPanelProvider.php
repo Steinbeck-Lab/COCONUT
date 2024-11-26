@@ -24,6 +24,9 @@ use pxlrbt\FilamentSpotlight\SpotlightPlugin;
 
 class DashboardPanelProvider extends PanelProvider
 {
+    /**
+     * Define the dashboard panel for the application.
+     */
     public function panel(Panel $panel): Panel
     {
         return $panel

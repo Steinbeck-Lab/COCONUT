@@ -8,6 +8,13 @@ use Spatie\Permission\PermissionRegistrar;
 
 class ShieldSeeder extends Seeder
 {
+    /**
+     * Run the database seeds to create roles and permissions.
+     *
+     * This function clears the cached permissions and sets up roles with their
+     * respective permissions as specified in the JSON strings for roles and direct
+     * permissions. After seeding, it outputs a completion message.
+     */
     public function run(): void
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
@@ -21,6 +28,16 @@ class ShieldSeeder extends Seeder
         $this->command->info('Shield Seeding Completed.');
     }
 
+    /**
+     * Creates roles and permissions according to the given JSON string.
+     *
+     * The JSON string should be an array of objects, where each object should have
+     * the following properties:
+     *
+     * - `name`: The name of the role.
+     * - `guard_name`: The guard name of the role.
+     * - `permissions`: An array of permission names.
+     */
     protected static function makeRolesWithPermissions(string $rolesWithPermissions): void
     {
         if (! blank($rolePlusPermissions = json_decode($rolesWithPermissions, true))) {
@@ -49,6 +66,15 @@ class ShieldSeeder extends Seeder
         }
     }
 
+    /**
+     * Creates direct permissions according to the given JSON string.
+     *
+     * The JSON string should be an array of objects, where each object should have
+     * the following properties:
+     *
+     * - `name`: The name of the permission.
+     * - `guard_name`: The guard name of the permission.
+     */
     public static function makeDirectPermissions(string $directPermissions): void
     {
         if (! blank($permissions = json_decode($directPermissions, true))) {
