@@ -15,6 +15,11 @@ class EmailVerificationTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Test that the email verification screen can be rendered.
+     *
+     * This test checks whether the email verification screen is accessible by users who have not verified their email.
+     */
     public function test_email_verification_screen_can_be_rendered(): void
     {
         if (! Features::enabled(Features::emailVerification())) {
@@ -28,6 +33,12 @@ class EmailVerificationTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * Test that the email can be verified.
+     *
+     * This test simulates the email verification process for a user, verifies that the user can verify their email,
+     * and ensures that the appropriate event is dispatched.
+     */
     public function test_email_can_be_verified(): void
     {
         if (! Features::enabled(Features::emailVerification())) {
@@ -52,6 +63,11 @@ class EmailVerificationTest extends TestCase
         $response->assertRedirect(RouteServiceProvider::HOME.'?verified=1');
     }
 
+    /**
+     * Test that the email cannot be verified with an invalid hash.
+     *
+     * This test ensures that a user cannot verify their email if the hash in the verification URL is incorrect.
+     */
     public function test_email_can_not_verified_with_invalid_hash(): void
     {
         if (! Features::enabled(Features::emailVerification())) {

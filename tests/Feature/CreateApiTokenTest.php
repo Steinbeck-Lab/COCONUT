@@ -13,6 +13,12 @@ class CreateApiTokenTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Test that API tokens can be created.
+     *
+     * This test ensures that a user can create an API token with the specified name
+     * and permissions, and verifies that the token is successfully created and stored.
+     */
     public function test_api_tokens_can_be_created(): void
     {
         if (! Features::hasApiFeatures()) {

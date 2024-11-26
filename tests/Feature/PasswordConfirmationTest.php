@@ -10,6 +10,11 @@ class PasswordConfirmationTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Test that the password confirmation screen can be rendered.
+     *
+     * This test ensures that the password confirmation screen is accessible for users who are required to confirm their password.
+     */
     public function test_confirm_password_screen_can_be_rendered(): void
     {
         $user = User::factory()->withPersonalTeam()->create();
@@ -19,6 +24,11 @@ class PasswordConfirmationTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * Test that the password can be confirmed successfully.
+     *
+     * This test simulates a user confirming their password and ensures that the confirmation is successful.
+     */
     public function test_password_can_be_confirmed(): void
     {
         $user = User::factory()->create();
@@ -31,6 +41,11 @@ class PasswordConfirmationTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
+    /**
+     * Test that the password is not confirmed with an invalid password.
+     *
+     * This test ensures that the password confirmation fails if the provided password is incorrect.
+     */
     public function test_password_is_not_confirmed_with_invalid_password(): void
     {
         $user = User::factory()->create();

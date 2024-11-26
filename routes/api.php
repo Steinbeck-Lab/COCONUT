@@ -36,6 +36,7 @@ Route::prefix('auth')->group(function () {
     });
 });
 
+// Resources authentication
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Rest::resource('molecules', \App\Rest\Controllers\MoleculesController::class);
     Rest::resource('collections', \App\Rest\Controllers\CollectionsController::class);

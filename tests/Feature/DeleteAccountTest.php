@@ -13,6 +13,12 @@ class DeleteAccountTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Test that user accounts can be deleted.
+     *
+     * This test ensures that a user can delete their account by providing the correct password,
+     * and that the account is effectively removed after deletion.
+     */
     public function test_user_accounts_can_be_deleted(): void
     {
         if (! Features::hasAccountDeletionFeatures()) {
@@ -28,6 +34,12 @@ class DeleteAccountTest extends TestCase
         $this->assertNull($user->fresh());
     }
 
+    /**
+     * Test that the correct password must be provided before an account can be deleted.
+     *
+     * This test ensures that an incorrect password prevents the account from being deleted,
+     * and that the account remains active.
+     */
     public function test_correct_password_must_be_provided_before_account_can_be_deleted(): void
     {
         if (! Features::hasAccountDeletionFeatures()) {

@@ -14,6 +14,12 @@ class ApiTokenPermissionsTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Test that the API token permissions can be updated correctly.
+     *
+     * This test ensures that a user's API token can be updated with new permissions,
+     * and that existing permissions are removed as expected.
+     */
     public function test_api_token_permissions_can_be_updated(): void
     {
         if (! Features::hasApiFeatures()) {

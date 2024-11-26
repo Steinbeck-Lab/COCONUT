@@ -12,6 +12,11 @@ class ProfileInformationTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Test that the current profile information is available in the profile update form.
+     *
+     * This test ensures that the current user's profile information (name and email) is correctly loaded into the profile update form.
+     */
     public function test_current_profile_information_is_available(): void
     {
         $this->actingAs($user = User::factory()->create());
@@ -22,6 +27,11 @@ class ProfileInformationTest extends TestCase
         $this->assertEquals($user->email, $component->state['email']);
     }
 
+    /**
+     * Test that the profile information can be updated.
+     *
+     * This test ensures that the profile information (name and email) can be updated successfully.
+     */
     public function test_profile_information_can_be_updated(): void
     {
         $this->actingAs($user = User::factory()->create());

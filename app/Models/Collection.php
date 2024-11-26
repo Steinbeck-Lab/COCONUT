@@ -85,6 +85,12 @@ class Collection extends Model implements Auditable, HasMedia
         return $this->morphToMany(Report::class, 'reportable');
     }
 
+    /**
+     * Transforms the audit data by applying a custom function to the provided array.
+     *
+     * @param  array  $data  The audit data to transform.
+     * @return array The transformed audit data.
+     */
     public function transformAudit(array $data): array
     {
         return changeAudit($data);
