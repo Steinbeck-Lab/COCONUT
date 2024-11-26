@@ -18,6 +18,8 @@ class ImportPubChem implements ShouldQueue
 
     /**
      * Create a new job instance.
+     *
+     * @param  mixed  $molecule
      */
     public function __construct($molecule)
     {
@@ -40,6 +42,16 @@ class ImportPubChem implements ShouldQueue
         $this->fetchIUPACNameFromPubChem();
     }
 
+    /**
+     * Fetch IUPAC Name from PubChem.
+     *
+     * This function first fetches the PubChem CID from the given SMILES string.
+     * If the CID is not 0, it will fetch the properties of the CID, and look for the IUPAC Name.
+     * If the IUPAC Name is found, it will update the molecule's iupac_name field with the found value.
+     * Finally, it will save the molecule.
+     *
+     * @return void
+     */
     public function fetchIUPACNameFromPubChem()
     {
         $smilesURL = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/cids/TXT?smiles='.urlencode($this->molecule->canonical_smiles);
@@ -63,6 +75,16 @@ class ImportPubChem implements ShouldQueue
         }
     }
 
+    /**
+     * Fetch synonyms and CAS registry numbers from PubChem.
+     *
+     * This function takes a PubChem CID and fetches the synonyms of the compound.
+     * It then searches for CAS registry numbers in the synonyms and stores them in the 'cas' field of the molecule.
+     * If the molecule does not have a name, it will set the name to the first synonym.
+     *
+     * @param  string  $cid  The PubChem CID of the compound.
+     * @return void
+     */
     public function fetchSynonymsCASFromPubChem($cid)
     {
         if ($cid && $cid != 0) {

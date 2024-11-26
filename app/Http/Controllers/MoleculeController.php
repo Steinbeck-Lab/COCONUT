@@ -10,6 +10,10 @@ class MoleculeController extends Controller
 {
     /**
      * Handle the incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request  The incoming request instance.
+     * @param  string  $id  The identifier of the molecule.
+     * @return \Illuminate\View\View The rendered view for the molecule.
      */
     public function __invoke(Request $request, $id)
     {

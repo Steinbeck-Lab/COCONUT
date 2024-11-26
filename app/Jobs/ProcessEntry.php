@@ -20,6 +20,8 @@ class ProcessEntry implements ShouldQueue
 
     /**
      * Create a new job instance.
+     *
+     * @param  mixed  $entry
      */
     public function __construct($entry)
     {

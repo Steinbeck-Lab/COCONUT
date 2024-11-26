@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
+    /**
+     * Perform a search for molecules based on various query types.
+     *
+     * @param  \Illuminate\Http\Request  $request  The incoming request instance.
+     * @return \Illuminate\Pagination\LengthAwarePaginator Paginated search results for molecules.
+     *
+     * This method processes search queries, identifies the query type (e.g., SMILES, InChI, tags),
+     * and retrieves results from the database or cache with optional filters and pagination.
+     */
     public function search(Request $request)
     {
         try {

@@ -23,7 +23,9 @@ class ImportEntry implements ShouldBeUnique, ShouldQueue
     protected $entry;
 
     /**
-     * Create a new job instance.
+     * Create a new job instance with the read entry of model Entry.
+     *
+     * @param  mixed  $entry
      */
     public function __construct($entry)
     {
@@ -31,7 +33,12 @@ class ImportEntry implements ShouldBeUnique, ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Handle molecule creation or updating based on entry data.
+     *
+     * @return void
+     *
+     * This method processes stereochemistry, organism, location, and DOI citations to
+     * create or update molecules and attach related details.
      */
     public function handle(): void
     {
@@ -117,6 +124,17 @@ class ImportEntry implements ShouldBeUnique, ShouldQueue
         }
     }
 
+    /**
+     * Fetches or creates a molecule based on its standard_inchi.
+     * If the molecule already exists but has a different canonical_smiles,
+     * it marks the existing molecule as a tautomer and creates a new molecule
+     * with the given canonical_smiles. It then sets the related molecules
+     * (all molecules with the same standard_inchi) as tautomers of each other.
+     *
+     * @param  string  $canonical_smiles  The canonical smiles of the molecule.
+     * @param  string  $standard_inchi  The standard inchi of the molecule.
+     * @return \App\Models\Molecule The created or fetched molecule.
+     */
     public function firstOrCreateMolecule($canonical_smiles, $standard_inchi)
     {
         $mol = Molecule::firstOrCreate(['standard_inchi' => $standard_inchi]);
@@ -148,6 +166,18 @@ class ImportEntry implements ShouldBeUnique, ShouldQueue
         return $mol;
     }
 
+    /**
+     * Return the molecule representations for the given type, as a associative array.
+     * The representations include 'inchi', 'inchikey', 'smiles', 'standard_inchi',
+     * 'standard_inchi_key', and 'molfile'.
+     * If $type is not 'parent', the array will also include a 'has_stereo_defined'
+     * key with a boolean value indicating whether stereochemistry was defined
+     * for the molecule.
+     *
+     * @param  string  $type  The type of molecule to get representations for.
+     *                        Must be one of 'parent', 'sample', or 'product'.
+     * @return array The molecule representations for the given type.
+     */
     public function getRepresentations($type)
     {
         $data = json_decode($this->entry->cm_data, true);

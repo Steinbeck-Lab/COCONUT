@@ -18,6 +18,8 @@ class LoadEntriesBatch implements ShouldQueue
 
     /**
      * Create a new job instance.
+     *
+     * @param  array  $ids
      */
     public function __construct($ids)
     {

@@ -9,6 +9,19 @@ use Illuminate\Http\Request;
 
 class CompoundController extends Controller
 {
+    /**
+     * Retrieve a molecule or a specific property of it by its identifier.
+     *
+     * @param  \Illuminate\Http\Request  $request  The incoming request instance.
+     * @param  string  $id  The identifier of the molecule.
+     * @param  string|null  $property  (Optional) The specific property of the molecule to retrieve.
+     * @param  string|null  $key  (Optional) A specific key within the property to retrieve.
+     * @return mixed The molecule, its property, or a specific key within the property.
+     *
+     * This method fetches a molecule by its identifier, including its properties and citations.
+     * If a property is provided, it returns the requested property. If both a property and key
+     * are provided, it returns the value associated with the key within the property.
+     */
     public function id(Request $request, $id, $property = null, $key = null)
     {
         $molecule = Molecule::with(['properties', 'citations'])->where('identifier', $id)->firstOrFail();
@@ -24,6 +37,16 @@ class CompoundController extends Controller
         return $molecule;
     }
 
+    /**
+     * Retrieve a paginated list of active molecules with optional sorting.
+     *
+     * @param  \Illuminate\Http\Request  $request  The incoming request instance.
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection A paginated collection of active molecules.
+     *
+     * This method retrieves active molecules from the database, optionally sorted by the latest updated time.
+     * The page size can be customized through the 'size' request parameter, with a default of 15.
+     * If the 'sort' parameter is set to 'latest', molecules are ordered by the most recently updated.
+     */
     public function list(Request $request)
     {
         $sort = $request->get('sort');

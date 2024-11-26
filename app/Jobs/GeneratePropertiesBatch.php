@@ -18,6 +18,9 @@ class GeneratePropertiesBatch implements ShouldQueue
 
     /**
      * Create a new job instance.
+     *
+     * @param  array  $ids
+     * @return void
      */
     public function __construct($ids)
     {

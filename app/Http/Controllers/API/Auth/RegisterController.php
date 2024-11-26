@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
+    /**
+     * Registers a new user with the provided credentials.
+     */
     public function register(Request $request): JsonResponse
     {
         $validatedData = $request->validate([
