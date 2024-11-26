@@ -10,6 +10,11 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class ApplicationOverview extends BaseWidget
 {
+    /**
+     * It provides stats for the overall application.
+     *
+     * @return array An array of Stat objects representing various statistics.
+     */
     protected function getStats(): array
     {
         return [

@@ -8,6 +8,11 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class LicenseOverview extends BaseWidget
 {
+    /**
+     * It provides a count of licenses.
+     *
+     * @return array An array of Stat objects representing various statistics.
+     */
     protected function getStats(): array
     {
         return [

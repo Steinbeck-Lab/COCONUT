@@ -7,5 +7,8 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateLicense extends CreateRecord
 {
+    /**
+     * The resource the record belongs to.
+     */
     protected static string $resource = LicenseResource::class;
 }

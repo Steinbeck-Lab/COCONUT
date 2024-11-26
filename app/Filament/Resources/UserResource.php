@@ -15,8 +15,14 @@ use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class UserResource extends Resource
 {
+    /**
+     * The class name of the resource.
+     */
     protected static ?string $model = User::class;
 
+    /**
+     * Navigation icon for the resource.
+     */
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     /**
@@ -37,6 +43,9 @@ class UserResource extends Resource
         return number_format(static::getModel()::count());
     }
 
+    /**
+     * Build the form for the resource.
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -75,6 +84,12 @@ class UserResource extends Resource
             ]);
     }
 
+    /**
+     * Configures the table schema for the User resource.
+     *
+     * @param  \Filament\Tables\Table  $table  The table instance to be configured.
+     * @return \Filament\Tables\Table The configured table instance.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -108,6 +123,14 @@ class UserResource extends Resource
             ]);
     }
 
+    /**
+     * Get the relations for the User resource.
+     *
+     * This method returns an array of relation managers associated with
+     * the User resource, allowing for the management of related data.
+     *
+     * @return array The array of relation managers.
+     */
     public static function getRelations(): array
     {
         return [
@@ -116,6 +139,11 @@ class UserResource extends Resource
         ];
     }
 
+    /**
+     * Get the pages for the License resource.
+     *
+     * @return array An associative array of page class names and their corresponding routes.
+     */
     public static function getPages(): array
     {
         return [
