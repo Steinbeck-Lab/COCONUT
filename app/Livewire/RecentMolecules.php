@@ -11,8 +11,19 @@ class RecentMolecules extends Component
 {
     use WithPagination;
 
+    /**
+     * The number of molecules to display.
+     *
+     * @var int
+     */
     public $size = 5;
 
+    /**
+     * Renders the recent molecules page by fetching molecules from cache or querying the database.
+     * Caches the recent molecules for 48 hours.
+     *
+     * @return \Illuminate\View\View The rendered view of recent molecules.
+     */
     public function render()
     {
         return view('livewire.recent-molecules', [

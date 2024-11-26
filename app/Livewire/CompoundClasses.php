@@ -1009,12 +1009,27 @@ class CompoundClasses extends Component
         'Zearalenones',
     ];
 
+    /**
+     * Initialize the component with predefined data.
+     *
+     * @return void
+     *
+     * This method is called when the component is mounted, initializing the
+     * superClasses property.
+     */
     public function mount()
     {
         // $this->parentClasses = array_slice($this->parentClasses, 0, 50);
         $this->superClasses = $this->superClasses;
     }
 
+    /**
+     * Render the compound classes view.
+     *
+     * @return \Illuminate\View\View The view instance for compound classes.
+     *
+     * This method renders the view associated with the livewire component.
+     */
     public function render()
     {
         return view('livewire.compound-classes');

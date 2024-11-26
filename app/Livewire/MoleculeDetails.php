@@ -12,11 +12,22 @@ class MoleculeDetails extends Component
 {
     public $molecule;
 
+    /**
+     * Mounts the component, setting the molecule instance.
+     *
+     * @param  \App\Models\Molecule  $molecule  The molecule instance.
+     * @return void
+     */
     public function mount($molecule)
     {
         $this->molecule = $molecule;
     }
 
+    /**
+     * Handles post-render logic by checking cache for molecule data and updating it if necessary.
+     *
+     * @return void
+     */
     public function rendered()
     {
         $molecule = $this->molecule;
@@ -32,6 +43,11 @@ class MoleculeDetails extends Component
         }
     }
 
+    /**
+     * Provides a loading placeholder with a spinner animation.
+     *
+     * @return string HTML string of the placeholder
+     */
     public function placeholder()
     {
         return <<<'HTML'
@@ -60,6 +76,12 @@ class MoleculeDetails extends Component
         HTML;
     }
 
+    /**
+     * Retrieves and combines references and their associated URLs from a pivot.
+     *
+     * @param  object  $pivot  The pivot model containing reference and URL data.
+     * @return array Combined reference-URL pairs
+     */
     public function getReferenceUrls($pivot)
     {
         $references = explode('|', $pivot->reference);
@@ -72,6 +94,11 @@ class MoleculeDetails extends Component
         return $combined;
     }
 
+    /**
+     * Renders the molecule details view.
+     *
+     * @return View The Livewire view for displaying molecule details.
+     */
     public function render(): View
     {
         return view('livewire.molecule-details');

@@ -21,6 +21,11 @@ class Welcome extends Component
     #[Url(as: 'activeTab')]
     public $activeTab = 'molecules';
 
+    /**
+     * Generates a placeholder HTML view with a loading spinner and a background pattern.
+     *
+     * @return string The HTML structure for the placeholder.
+     */
     public function placeholder()
     {
         return <<<'HTML'
@@ -49,6 +54,11 @@ class Welcome extends Component
         HTML;
     }
 
+    /**
+     * Renders the welcome view with the statistics for molecules, collections, organisms, and citations.
+     *
+     * @return \Illuminate\View\View The rendered welcome view with data.
+     */
     public function render()
     {
         $this->totalMolecules = Cache::get('stats.molecules');

@@ -13,6 +13,13 @@ class Faqs extends Component
         'Can I search for a molecule by its structure?' => 'Yes, you can search using SMILES, InChI or InChIKey. Options are also available to search structures for exact, sub-structure or similarity matches. Please refer to our docs for more details.',
     ];
 
+    /**
+     * Render the FAQs view.
+     *
+     * @return \Illuminate\View\View The view instance for the FAQs.
+     *
+     * This method renders the view associated with the livewire FAQ component.
+     */
     public function render()
     {
         return view('livewire.faqs');

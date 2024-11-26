@@ -17,6 +17,12 @@ class SimilarOrganisms extends Component implements HasForms, HasTable
     use InteractsWithForms;
     use InteractsWithTable;
 
+    /**
+     * Defines the table configuration for displaying organisms.
+     *
+     * @param  Table  $table  The table instance to be configured.
+     * @return Table The configured table instance.
+     */
     public function table(Table $table): Table
     {
         return $table
@@ -35,6 +41,11 @@ class SimilarOrganisms extends Component implements HasForms, HasTable
             ]);
     }
 
+    /**
+     * Renders the view for displaying similar organisms.
+     *
+     * @return \Illuminate\View\View The view for the similar organisms page.
+     */
     public function render(): View
     {
         return view('livewire.similar-organisms');

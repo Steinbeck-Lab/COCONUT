@@ -9,6 +9,11 @@ class Download extends Component
 {
     public $terms = '';
 
+    /**
+     * Renders the 'download' Livewire component view with the 'guest' layout.
+     *
+     * @return \Illuminate\View\View
+     */
     #[Layout('layouts.guest')]
     public function render()
     {

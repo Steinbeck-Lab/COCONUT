@@ -16,31 +16,81 @@ class Search extends Component
 {
     use WithPagination;
 
+    /**
+     * Search query
+     *
+     * @var string
+     */
     #[Url(except: '', as: 'q')]
     public $query = '';
 
+    /**
+     * Search size
+     *
+     * @var int
+     */
     #[Url(as: 'limit')]
     public $size = 20;
 
+    /**
+     * Search sort
+     *
+     * @var string
+     */
     #[Url(as: 'sort')]
     public $sort = null;
 
+    /**
+     * Search page
+     *
+     * @var int
+     */
     #[Url(as: 'page')]
     public $page = null;
 
+    /**
+     * Search type
+     *
+     * @var string
+     */
     #[Url(as: 'type')]
     public $type = null;
 
+    /**
+     * Search tag type
+     *
+     * @var string
+     */
     #[Url(as: 'tagType')]
     public $tagType = null;
 
+    /**
+     * Search collection
+     *
+     * @var \Illuminate\Support\Collection
+     */
     public $collection = null;
 
+    /**
+     * Search organisms
+     *
+     * @var \App\Models\Organism
+     */
     public $organisms = null;
 
+    /**
+     * Default active tab
+     *
+     * @var string
+     */
     #[Url(as: 'activeTab')]
     public $activeTab = 'molecules';
 
+    /**
+     * Returns a loading placeholder with a spinner animation.
+     *
+     * @return string HTML string of the placeholder
+     */
     public function placeholder()
     {
         return <<<'HTML'
@@ -69,11 +119,22 @@ class Search extends Component
         HTML;
     }
 
+    /**
+     * Handles page updates for pagination.
+     *
+     * @param  int  $page  The page number to set.
+     * @return void
+     */
     public function updatingPage($page)
     {
         $this->page = $page;
     }
 
+    /**
+     * Resets filters and sets the page number to 1 when the search query is updated.
+     *
+     * @return void
+     */
     public function updatedQuery()
     {
         $this->page = 1;
@@ -81,11 +142,23 @@ class Search extends Component
         $this->tagType = null;
     }
 
+    /**
+     * Triggers a search action when a molecule search event occurs.
+     *
+     * @param  SearchMolecule  $search  The search object containing search parameters.
+     * @return void
+     */
     public function search(SearchMolecule $search)
     {
         $this->render($search);
     }
 
+    /**
+     * Renders the search results page with cached results.
+     *
+     * @param  SearchMolecule  $search  The search object containing search parameters.
+     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse The search results view or error response.
+     */
     public function render(SearchMolecule $search)
     {
         try {

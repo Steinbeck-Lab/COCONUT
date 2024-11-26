@@ -6,10 +6,25 @@ use Livewire\Component;
 
 class MoleculeHistoryTimeline extends Component
 {
+    /**
+     * The Molecule model instance.
+     *
+     * @var \App\Models\Molecule
+     */
     public $mol = null;
 
+    /**
+     * The history of audits for the molecule.
+     *
+     * @var array
+     */
     public $audit_data = [];
 
+    /**
+     * Retrieves the history of audits for the molecule, including metadata and affected columns.
+     *
+     * @return void
+     */
     public function getHistory()
     {
         $audit_data = [];
@@ -47,6 +62,11 @@ class MoleculeHistoryTimeline extends Component
         $this->audit_data = $audit_data;
     }
 
+    /**
+     * Renders the view displaying the molecule's audit history timeline.
+     *
+     * @return \Illuminate\View\View The rendered view for molecule history timeline.
+     */
     public function render()
     {
         return view('livewire.molecule-history-timeline')->with([

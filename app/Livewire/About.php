@@ -9,6 +9,11 @@ class About extends Component
 {
     public $terms = '';
 
+    /**
+     * Render the 'about' Livewire component view with the 'guest' layout.
+     *
+     * @return \Illuminate\View\View
+     */
     #[Layout('layouts.guest')]
     public function render()
     {
