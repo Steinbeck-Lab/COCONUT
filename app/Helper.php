@@ -285,7 +285,7 @@ function getOverallChanges($data)
 
     $synonym_changes = [];
     $db_synonyms = $molecule->synonyms;
-    $deletable_synonyms = array_key_exists('existing_synonyms', $data) ? array_diff($db_synonyms, $data['existing_synonyms']) : [];
+    $deletable_synonyms = array_key_exists('existing_synonyms', $data) && ! empty($db_synonyms) ? array_diff($db_synonyms, $data['existing_synonyms']) : [];
     $new_synonyms = array_key_exists('new_synonyms', $data) ? (is_string($data['new_synonyms']) ? $data['new_synonyms'] : implode(',', $data['new_synonyms'])) : null;
     if (count($deletable_synonyms) > 0 || $new_synonyms) {
         $key = implode(',', $deletable_synonyms) == '' ? ' ' : implode(',', $deletable_synonyms);
@@ -313,7 +313,7 @@ function getOverallChanges($data)
 
     $cas_changes = [];
     $db_cas = $molecule->cas;
-    $deletable_cas = array_key_exists('existing_cas', $data) ? array_diff($db_cas, $data['existing_cas']) : [];
+    $deletable_cas = array_key_exists('existing_cas', $data) && ! empty($db_cas) ? array_diff($db_cas, $data['existing_cas']) : [];
     $new_cas = array_key_exists('new_cas', $data) ? (is_string($data['new_cas']) ? $data['new_cas'] : implode(',', $data['new_cas'])) : null;
     if (count($deletable_cas) > 0 || $new_cas) {
         $key = implode(',', $deletable_cas) == '' ? ' ' : implode(',', $deletable_cas);
@@ -434,4 +434,42 @@ function remove_italics_notation($text)
     $converted_text = preg_replace('/~\{([^}]*)\}/', '$1', $text);
 
     return $converted_text;
+}
+
+function getFilterMap()
+{
+    return [
+        'mf' => 'molecular_formula',
+        'mw' => 'molecular_weight',
+        'hac' => 'heavy_atom_count',
+        'tac' => 'total_atom_count',
+        'arc' => 'aromatic_ring_count',
+        'rbc' => 'rotatable_bond_count',
+        'mrc' => 'minimal_number_of_rings',
+        'fc' => 'formal_charge',
+        'cs' => 'contains_sugar',
+        'crs' => 'contains_ring_sugars',
+        'cls' => 'contains_linear_sugars',
+        'npl' => 'np_likeness_score',
+        'alogp' => 'alogp',
+        'topopsa' => 'topo_psa',
+        'fsp3' => 'fsp3',
+        'hba' => 'h_bond_acceptor_count',
+        'hbd' => 'h_bond_donor_count',
+        'ro5v' => 'rule_of_5_violations',
+        'lhba' => 'lipinski_h_bond_acceptor_count',
+        'lhbd' => 'lipinski_h_bond_donor_count',
+        'lro5v' => 'lipinski_rule_of_5_violations',
+        'ds' => 'found_in_databases',
+        'class' => 'chemical_class',
+        'subclass' => 'chemical_sub_class',
+        'superclass' => 'chemical_super_class',
+        'parent' => 'direct_parent_classification',
+        'np_class' => 'np_classifier_class',
+        'np_superclass' => 'np_classifier_superclass',
+        'np_pathway' => 'np_classifier_pathway',
+        'np_glycoside' => 'np_classifier_is_glycoside',
+        'org' => 'organism',
+        'cite' => 'ciatation',
+    ];
 }
